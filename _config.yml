@@ -1,0 +1,23 @@
+# Base configs
+baseurl: "https://regkayq.github.io/site/"
+image_fulls_loc: "/images/fulls"
+image_thumbs_loc: "/images/thumbs"
+google_analytics: ""
+
+# UI configs
+title: "Kay Quade"
+subtitle: ""
+author: ""
+header:
+ title: "P"
+ subtitle: ""
+footer:
+ name: ""
+ bio: ""
+social_urls:
+  facebook: ""
+  twitter: ""
+  instagram: ""
+  dribbble: ""
+  linkedin: ""
+  github: ""
