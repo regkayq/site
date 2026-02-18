@@ -232,6 +232,13 @@
       box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
     }
 
+    /* demo typing cursor inside the input */
+    .field-input.is-typing {
+      border-color: var(--purple-mid);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+      caret-color: var(--purple-pale);
+    }
+
     /* ── PRIMARY BUTTON ────────────────────────── */
     .btn-primary {
       display: inline-flex;
@@ -257,6 +264,35 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 0 44px rgba(109,40,217,0.6);
+    }
+
+    /* button pulse after demo fill */
+    @keyframes btn-pulse {
+      0%   { box-shadow: 0 0 28px rgba(109,40,217,0.4); transform: translateY(0); }
+      40%  { box-shadow: 0 0 60px rgba(109,40,217,0.85); transform: translateY(-3px); }
+      100% { box-shadow: 0 0 28px rgba(109,40,217,0.4); transform: translateY(0); }
+    }
+
+    .btn-primary.demo-ready {
+      animation: btn-pulse 0.7s ease-out forwards;
+    }
+
+    /* demo chip */
+    .demo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.18rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.12);
+      border: 1px solid var(--border);
+      vertical-align: middle;
+      margin-left: 0.55rem;
     }
 
     /* ── DIVIDER ───────────────────────────────── */
@@ -421,6 +457,7 @@
       </h1>
       <p class="ob-sub">
         Join investigators and legal professionals documenting war crimes with AI.
+        <span class="demo-chip">&#9679;&nbsp;Live demo</span>
       </p>
 
       <form class="ob-form" action="#" method="post">
@@ -499,5 +536,107 @@
     <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
   </footer>
 
+  <script>
+    (function () {
+      const emailInput    = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const submitBtn     = document.querySelector('.btn-primary');
+
+      const DEMO_EMAIL    = 'jane@frontlinewitness.org';
+      const DEMO_PASSWORD = 'SecureP@ss2025!';
+
+      let stopped = false;
+      let loopTimer = null;
+
+      /* ── helpers ────────────────────────────────── */
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      /* type text into an input one character at a time */
+      async function typeIn(input, text) {
+        input.value = '';
+        input.classList.add('is-typing');
+        for (const ch of text) {
+          if (stopped) return;
+          input.value += ch;
+          /* slightly longer pause after punctuation for realism */
+          const extra = /[@._!]/.test(ch) ? 120 : 0;
+          await sleep(65 + extra + Math.random() * 55);
+        }
+      }
+
+      function clearInputs() {
+        emailInput.value    = '';
+        passwordInput.value = '';
+        emailInput.classList.remove('is-typing');
+        passwordInput.classList.remove('is-typing');
+      }
+
+      function pulseButton() {
+        submitBtn.classList.remove('demo-ready');
+        /* force reflow so the animation restarts */
+        void submitBtn.offsetWidth;
+        submitBtn.classList.add('demo-ready');
+        setTimeout(() => submitBtn.classList.remove('demo-ready'), 720);
+      }
+
+      /* ── main demo loop ─────────────────────────── */
+      async function runDemo() {
+        if (stopped) return;
+
+        await sleep(1200);
+        if (stopped) return;
+
+        /* email */
+        emailInput.focus();
+        await typeIn(emailInput, DEMO_EMAIL);
+        if (stopped) return;
+        emailInput.classList.remove('is-typing');
+
+        await sleep(450);
+        if (stopped) return;
+
+        /* password */
+        passwordInput.focus();
+        await typeIn(passwordInput, DEMO_PASSWORD);
+        if (stopped) return;
+        passwordInput.classList.remove('is-typing');
+        passwordInput.blur();
+
+        await sleep(350);
+        if (stopped) return;
+
+        /* celebrate the button */
+        pulseButton();
+
+        /* hold for a moment, then reset and loop */
+        await sleep(2800);
+        if (stopped) return;
+
+        clearInputs();
+
+        await sleep(900);
+        if (stopped) return;
+
+        runDemo();
+      }
+
+      /* ── stop animation when user interacts ─────── */
+      function stopDemo() {
+        stopped = true;
+        clearTimeout(loopTimer);
+        emailInput.classList.remove('is-typing');
+        passwordInput.classList.remove('is-typing');
+      }
+
+      emailInput.addEventListener('pointerdown', stopDemo);
+      passwordInput.addEventListener('pointerdown', stopDemo);
+      emailInput.addEventListener('keydown', stopDemo);
+      passwordInput.addEventListener('keydown', stopDemo);
+
+      runDemo();
+    })();
+  </script>
 </body>
 </html>
