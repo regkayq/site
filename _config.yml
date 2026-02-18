@@ -1,5 +1,6 @@
 # Base configs
-baseurl: "https://regkayq.github.io/site/"
+url: "https://regkayq.github.io"
+baseurl: "/site"
 image_fulls_loc: "/images/fulls"
 image_thumbs_loc: "/images/thumbs"
 google_analytics: ""
