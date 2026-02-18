@@ -5,15 +5,19 @@ image_thumbs_loc: "/images/thumbs"
 google_analytics: ""
 
 # UI configs
-title: "Kay Quade"
-subtitle: ""
-author: ""
+title: "EVIDA — Evidence Intelligence Platform"
+subtitle: "AI-Powered Evidence Management for Justice"
+author: "EVIDA"
+web_design: "HTML5 UP"
+
 header:
- title: "P"
- subtitle: ""
+ title: "EVIDA"
+ subtitle: "Evidence Intelligence for Justice"
+
 footer:
- name: ""
- bio: ""
+ name: "About EVIDA"
+ bio: "EVIDA is an AI-powered platform built for human rights workers, journalists, NGO staff, and legal professionals. We help investigators securely organize digital evidence of war crimes and human rights violations — automatically generating case files, cross-referencing related evidence, and summarizing key findings so justice organizations can build credible, well-structured cases with confidence."
+
 social_urls:
   facebook: ""
   twitter: ""

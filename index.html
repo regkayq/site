@@ -18,17 +18,43 @@ layout: default
 
     <!-- Main -->
     <div id="main">
-        {% for image in site.static_files %}
-        {% if image.path contains 'fulls' %}
+
         <article class="thumb">
-            <a href="{{ site.baseurl }}{{ site.image_fulls_loc }}/{{ image.name }}" class="image">
-                <img src="{{ site.baseurl }}{{ site.image_thumbs_loc }}/{{ image.name }}" alt=""
-                     data-name="{{ image.name }}"/></a>
-            <!--<h2></h2>
-            <p></p>-->
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/secure-evidence.jpg" alt="Secure Evidence Management" /></a>
+            <h2>Secure Evidence Management</h2>
+            <p>Safely upload, store, and manage digital evidence — photos, videos, documents, and geolocation data — with end-to-end encryption designed for high-risk environments.</p>
         </article>
-        {% endif %}
-        {% endfor %}
+
+        <article class="thumb">
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/ai-case-files.jpg" alt="AI-Generated Case Files" /></a>
+            <h2>AI-Generated Case Files</h2>
+            <p>EVIDA's AI automatically structures raw evidence into organized, court-ready case files — saving investigators hours of manual documentation work.</p>
+        </article>
+
+        <article class="thumb">
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/cross-reference.jpg" alt="Evidence Cross-Referencing" /></a>
+            <h2>Evidence Cross-Referencing</h2>
+            <p>Automatically identify connections across incidents, locations, perpetrators, and victims. Surface patterns that would take weeks to find manually.</p>
+        </article>
+
+        <article class="thumb">
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/findings-summary.jpg" alt="Key Findings Summaries" /></a>
+            <h2>Key Findings Summaries</h2>
+            <p>Generate clear, concise summaries of complex evidence sets — enabling investigators, legal teams, and advocacy organizations to communicate findings effectively.</p>
+        </article>
+
+        <article class="thumb">
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/collaboration.jpg" alt="Secure Team Collaboration" /></a>
+            <h2>Secure Team Collaboration</h2>
+            <p>Role-based access controls let journalists, lawyers, and NGO staff work together safely — with audit logs and permissions tailored to sensitive investigations.</p>
+        </article>
+
+        <article class="thumb">
+            <a href="#" class="image"><img src="{{ site.baseurl }}/images/fulls/reporting.jpg" alt="Legal-Grade Reporting" /></a>
+            <h2>Legal-Grade Reporting</h2>
+            <p>Export structured case reports aligned with international legal standards — ready for submission to courts, tribunals, and human rights bodies worldwide.</p>
+        </article>
+
     </div>
 
     <!-- Footer -->
@@ -38,25 +64,18 @@ layout: default
                 <section>
                     <h2>{{ site.footer.name }}</h2>
                     <p>{{ site.footer.bio }}</p>
-                    <p>{{ site.footer.github }}</p>
                 </section>
                 <section>
-                    <h2>Sponsor</h2>
-                    <div class="ad">
-                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                        <ins class="adsbygoogle"
-                             style="display:block; text-align:center;"
-                             data-ad-layout="in-article"
-                             data-ad-format="fluid"
-                             data-ad-client="ca-pub-1702577941194110"
-                             data-ad-slot="9823584598"></ins>
-                        <script>
-                            (adsbygoogle = window.adsbygoogle || []).push({});
-                        </script>
-                    </div>
+                    <h2>Built For</h2>
+                    <ul>
+                        <li><strong>Human Rights Workers</strong> — Document and preserve evidence of violations in active conflict zones.</li>
+                        <li><strong>Journalists &amp; Investigators</strong> — Build structured, verifiable evidence trails for reporting.</li>
+                        <li><strong>NGO Staff</strong> — Manage large evidence collections across distributed field teams.</li>
+                        <li><strong>Legal Professionals</strong> — Prepare court-ready documentation aligned with international standards.</li>
+                    </ul>
                 </section>
                 <section>
-                    <h2>Follow me on ...</h2>
+                    <h2>Connect with EVIDA</h2>
                     <ul class="icons">
                         {% if site.social_urls.facebook %}
                             <li>
@@ -72,17 +91,10 @@ layout: default
                                 </a>
                             </li>
                         {% endif %}
-                        {% if site.social_urls.instagram %}
+                        {% if site.social_urls.linkedin %}
                             <li>
-                                <a href="{{ site.social_urls.instagram }}" class="icon fa-instagram">
-                                    <span class="label">Instagram</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if site.social_urls.dribbble %}
-                            <li>
-                                <a href="{{ site.social_urls.dribbble }}" class="icon fa-dribbble">
-                                    <span class="label">Dribbble</span>
+                                <a href="{{ site.social_urls.linkedin }}" class="icon fa-linkedin">
+                                    <span class="label">LinkedIn</span>
                                 </a>
                             </li>
                         {% endif %}
@@ -90,13 +102,6 @@ layout: default
                             <li>
                                 <a href="{{ site.social_urls.github }}" class="icon fa-github">
                                     <span class="label">GitHub</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if site.social_urls.linkedin %}
-                            <li>
-                                <a href="{{ site.social_urls.linkedin }}" class="icon fa-linkedin">
-                                    <span class="label">LinkedIn</span>
                                 </a>
                             </li>
                         {% endif %}
@@ -108,19 +113,26 @@ layout: default
             </div>
             <div>
                 <section>
-                    <h2>Get in touch</h2>
+                    <h2>Request Access</h2>
+                    <p>EVIDA is currently available to vetted human rights organizations, legal teams, and journalists. Submit your details below to request access.</p>
                     <form method="post" action="#">
                         <div class="field half first">
-                            <input type="text" name="name" id="name" placeholder="Name"/>
+                            <input type="text" name="name" id="name" placeholder="Full Name"/>
                         </div>
                         <div class="field half">
-                            <input type="text" name="email" id="email" placeholder="Email"/>
+                            <input type="text" name="organization" id="organization" placeholder="Organization"/>
+                        </div>
+                        <div class="field half first">
+                            <input type="text" name="email" id="email" placeholder="Work Email"/>
+                        </div>
+                        <div class="field half">
+                            <input type="text" name="role" id="role" placeholder="Your Role"/>
                         </div>
                         <div class="field">
-                            <textarea name="message" id="message" rows="4" placeholder="Message"></textarea>
+                            <textarea name="message" id="message" rows="4" placeholder="Briefly describe your investigative work and how you intend to use EVIDA."></textarea>
                         </div>
                         <ul class="actions">
-                            <li><input type="submit" value="Send" class="special"/></li>
+                            <li><input type="submit" value="Request Access" class="special"/></li>
                             <li><input type="reset" value="Reset"/></li>
                         </ul>
                     </form>
