@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — EVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080812;
+      --bg-2:        #0e0e1e;
+      --bg-card:     #12122a;
+      --purple-deep: #3b0f6e;
+      --purple:      #6d28d9;
+      --purple-mid:  #7c3aed;
+      --purple-light:#a78bfa;
+      --purple-pale: #c4b5fd;
+      --accent:      #9333ea;
+      --white:       #f5f3ff;
+      --muted:       #94a3b8;
+      --border:      rgba(124,58,237,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8, 8, 18, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.active { color: var(--white); }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.52rem 1.2rem;
+      background: var(--purple-mid);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-nav:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── PAGE HEADER ────────────────────────────── */
+    .page-header {
+      position: relative;
+      z-index: 1;
+      padding: 160px 5% 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(109,40,217,0.3) 0%, rgba(109,40,217,0.04) 55%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      margin-bottom: 1.4rem;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      max-width: 700px;
+      margin: 0 auto 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .gradient {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 30%, #7c3aed 70%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── BILLING TOGGLE ─────────────────────────── */
+    .billing-toggle {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 2.4rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .toggle-track {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(109,40,217,0.25);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--purple-mid);
+      transition: transform 0.2s;
+    }
+
+    .billing-badge {
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: rgba(109,40,217,0.2);
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── PRICING GRID ───────────────────────────── */
+    .pricing-section {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 5% 8rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.4rem;
+      max-width: 1080px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    /* ── PRICING CARD ───────────────────────────── */
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2.4rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .pricing-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 70px rgba(109,40,217,0.18);
+    }
+
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple-mid), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .pricing-card:hover::before { opacity: 1; }
+
+    /* Featured / Popular card */
+    .pricing-card.featured {
+      border-color: rgba(124,58,237,0.55);
+      background: linear-gradient(160deg, rgba(59,15,110,0.35) 0%, var(--bg-card) 50%);
+      box-shadow:
+        0 0 0 1px rgba(109,40,217,0.3),
+        0 30px 80px rgba(109,40,217,0.22);
+      transform: translateY(-6px);
+    }
+
+    .pricing-card.featured::before { opacity: 1; }
+
+    .pricing-card.featured:hover {
+      transform: translateY(-10px);
+      box-shadow:
+        0 0 0 1px rgba(109,40,217,0.45),
+        0 40px 100px rgba(109,40,217,0.3);
+    }
+
+    .popular-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      color: #fff;
+      margin-bottom: 1.6rem;
+    }
+
+    .popular-badge::before {
+      content: '★';
+      font-size: 0.6rem;
+    }
+
+    .plan-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .plan-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .price-currency {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      line-height: 1;
+      margin-top: 0.2rem;
+    }
+
+    .price-amount {
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .price-period {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .plan-tagline {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .plan-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      width: 100%;
+      padding: 0.82rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      margin-bottom: 2rem;
+      cursor: pointer;
+      border: none;
+    }
+
+    .plan-cta.outline {
+      background: transparent;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+    }
+
+    .plan-cta.outline:hover {
+      background: rgba(124,58,237,0.1);
+      border-color: var(--purple-mid);
+    }
+
+    .plan-cta.solid {
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      color: #fff;
+      box-shadow: 0 0 28px rgba(109,40,217,0.4);
+    }
+
+    .plan-cta.solid:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 44px rgba(109,40,217,0.6);
+    }
+
+    /* Divider */
+    .plan-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 1.6rem;
+    }
+
+    /* Feature list */
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    .plan-features li .check {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(109,40,217,0.2);
+      border: 1px solid rgba(124,58,237,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+
+    .plan-features li .check svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .plan-features li.muted-item {
+      color: var(--muted);
+    }
+
+    .plan-features li.muted-item .check {
+      background: rgba(148,163,184,0.08);
+      border-color: rgba(148,163,184,0.15);
+    }
+
+    .feature-highlight {
+      font-weight: 600;
+      color: var(--purple-pale);
+    }
+
+    /* ── COMPARISON NOTE ────────────────────────── */
+    .pricing-note {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 5% 2rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .pricing-note a {
+      color: var(--purple-pale);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(196,181,253,0.3);
+      transition: border-color 0.2s;
+    }
+
+    .pricing-note a:hover {
+      border-color: var(--purple-pale);
+    }
+
+    /* ── FAQ STRIP ──────────────────────────────── */
+    .faq-section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 5%;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .faq-section .section-label {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--purple-pale);
+      margin-bottom: 0.8rem;
+    }
+
+    .faq-section h2 {
+      text-align: center;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 3rem;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem 0;
+    }
+
+    .faq-item:first-of-type {
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-q {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.55rem;
+    }
+
+    .faq-a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem 5%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(148,163,184,0.45);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.featured { transform: none; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+
+    @media (min-width: 641px) and (max-width: 900px) {
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ───────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="index.html">EVIDA</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="pricing.html" class="active">Pricing</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a class="btn-nav" href="onboarding.html">Get Started &rarr;</a>
+  </nav>
+
+  <!-- ── PAGE HEADER ────────────────────────────── -->
+  <div class="page-header">
+    <div class="section-tag">Pricing</div>
+    <h1>
+      Transparent plans for<br/>
+      <span class="gradient">every investigation</span>
+    </h1>
+    <p>
+      From independent journalists to large-scale NGOs, EVIDA scales with your mission.
+      No hidden fees. Cancel any time.
+    </p>
+    <div class="billing-toggle">
+      <span>Monthly</span>
+      <div class="toggle-track">
+        <div class="toggle-thumb"></div>
+      </div>
+      <span>Annual</span>
+      <span class="billing-badge">Save 20%</span>
+    </div>
+  </div>
+
+  <!-- ── PRICING CARDS ──────────────────────────── -->
+  <section class="pricing-section">
+    <div class="pricing-grid">
+
+      <!-- ── TIER 1: Field ── -->
+      <div class="pricing-card">
+        <div class="plan-name">Field</div>
+        <div class="plan-price">
+          <span class="price-currency">&euro;</span>
+          <span class="price-amount">4</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <p class="plan-tagline">For individual investigators and journalists getting started with digital evidence management.</p>
+        <a class="plan-cta outline" href="onboarding.html">Get Started &rarr;</a>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">1 GB</span> encrypted cloud storage</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">Limited AI tokens</span> per day</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Up to 3 active cases</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>AI case file generator</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Basic evidence uploads</span>
+          </li>
+          <li class="muted-item">
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
+            </span>
+            <span>Unlimited AI tokens</span>
+          </li>
+          <li class="muted-item">
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
+            </span>
+            <span>RAG knowledge system</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── TIER 2: Professional (FEATURED) ── -->
+      <div class="pricing-card featured">
+        <div class="popular-badge">Most Popular</div>
+        <div class="plan-name">Professional</div>
+        <div class="plan-price">
+          <span class="price-currency">&euro;</span>
+          <span class="price-amount">10</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <p class="plan-tagline">For NGO teams and legal professionals running multiple active investigations.</p>
+        <a class="plan-cta solid" href="onboarding.html">Get Started &rarr;</a>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">14 GB</span> encrypted cloud storage</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">Unlimited AI tokens</span> daily</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Unlimited active cases</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>AI case file generator</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Evidence cross-reference</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Team collaboration (up to 5)</span>
+          </li>
+          <li class="muted-item">
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>
+            </span>
+            <span>RAG knowledge system</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── TIER 3: Enterprise ── -->
+      <div class="pricing-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">
+          <span class="price-currency">&euro;</span>
+          <span class="price-amount">25</span>
+          <span class="price-period">/ month</span>
+        </div>
+        <p class="plan-tagline">For international organizations, legal bodies, and large investigative teams requiring the full EVIDA stack.</p>
+        <a class="plan-cta outline" href="onboarding.html">Get Started &rarr;</a>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">50 GB</span> encrypted cloud storage</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">Unlimited AI tokens</span> daily</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span><span class="feature-highlight">Dedicated RAG system</span> — custom knowledge base trained on your case corpus</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Unlimited active cases</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Unlimited team members</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>Priority support &amp; onboarding</span>
+          </li>
+          <li>
+            <span class="check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>
+            </span>
+            <span>ICC-ready export formats</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── NOTE ───────────────────────────────────── -->
+  <div class="pricing-note">
+    All plans include end-to-end encryption and chain-of-custody audit trails.
+    Need a custom solution? <a href="#">Contact us</a>.
+  </div>
+
+  <!-- ── FAQ ───────────────────────────────────── -->
+  <section class="faq-section">
+    <div class="section-label">FAQ</div>
+    <h2>Common questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I upgrade or downgrade my plan at any time?</div>
+      <div class="faq-a">Yes. You can change your plan at any time from your account settings. Upgrades take effect immediately; downgrades apply at the start of the next billing cycle.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What happens to my data if I exceed my storage limit?</div>
+      <div class="faq-a">You will receive a notification before reaching your limit. Uploads are paused until you either upgrade your plan or free up space — your existing data is never deleted.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What is the RAG system included in the Enterprise plan?</div>
+      <div class="faq-a">The Retrieval-Augmented Generation (RAG) system is a dedicated AI knowledge base built on your own case corpus. It allows EVIDA's AI to answer questions, surface patterns, and generate insights by retrieving directly from your organization's archived evidence and case files — not generic training data.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Is evidence stored securely and compliant with international standards?</div>
+      <div class="faq-a">All data is encrypted at rest and in transit with AES-256. EVIDA maintains tamper-proof chain-of-custody logs that meet the evidentiary standards of the ICC and UN investigative bodies.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do you offer discounts for NGOs or humanitarian organizations?</div>
+      <div class="faq-a">Yes. Registered non-profit and humanitarian organizations may qualify for reduced pricing. <a href="#">Contact our team</a> with your organization's credentials to learn more.</div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">EVIDA</span>
+    <ul class="footer-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>
