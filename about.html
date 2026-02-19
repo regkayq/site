@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About EVIDA — AI-Powered Evidence Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080812;
+      --bg-2:        #0e0e1e;
+      --bg-card:     #12122a;
+      --purple-deep: #3b0f6e;
+      --purple:      #6d28d9;
+      --purple-mid:  #7c3aed;
+      --purple-light:#a78bfa;
+      --purple-pale: #c4b5fd;
+      --accent:      #9333ea;
+      --white:       #f5f3ff;
+      --muted:       #94a3b8;
+      --border:      rgba(124,58,237,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8, 8, 18, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--white); }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.52rem 1.2rem;
+      background: var(--purple-mid);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-nav:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── PAGE HERO ─────────────────────────────── */
+    .page-hero {
+      position: relative;
+      padding: 160px 5% 90px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 550px;
+      background: radial-gradient(ellipse at center, rgba(109,40,217,0.3) 0%, rgba(109,40,217,0.04) 55%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.07;
+      letter-spacing: -0.04em;
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero h1 .gradient {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 30%, #7c3aed 70%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-hero p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.75;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SHARED SECTION LAYOUT ─────────────────── */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-heading {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      max-width: 640px;
+      margin-bottom: 1rem;
+    }
+
+    .section-heading .gradient {
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── HOW IT WORKS — two-column ─────────────── */
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .how-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.4rem 2.2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .how-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple-mid), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .how-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(109,40,217,0.18);
+    }
+
+    .how-card:hover::before { opacity: 1; }
+
+    .how-card-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(109,40,217,0.12);
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      margin-bottom: 1.4rem;
+    }
+
+    .how-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .how-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.8rem;
+    }
+
+    .how-card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.6rem;
+    }
+
+    .how-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .how-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .how-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      flex-shrink: 0;
+      margin-top: 0.45rem;
+    }
+
+    .connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      gap: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .connector-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 120px;
+    }
+
+    .connector-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    /* ── AUDIENCE CARDS ────────────────────────── */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .audience-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem 1.8rem;
+      text-align: center;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .audience-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(109,40,217,0.16);
+    }
+
+    .audience-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .audience-card h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .audience-card p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── AI CAPABILITIES ───────────────────────── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .ai-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .ai-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(109,40,217,0.06), transparent);
+      pointer-events: none;
+    }
+
+    .ai-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(109,40,217,0.18);
+    }
+
+    .ai-card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.3rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid rgba(109,40,217,0.2);
+    }
+
+    .ai-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .ai-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.2rem 0.7rem;
+      background: rgba(109,40,217,0.1);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+    }
+
+    /* ── SECURITY SECTION ──────────────────────── */
+    .security-section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 5%;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .security-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .security-text h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.12;
+      margin-bottom: 1rem;
+    }
+
+    .security-text h2 .gradient {
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .security-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .security-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pillar {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem 1.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .pillar:hover { border-color: rgba(124,58,237,0.45); }
+
+    .pillar-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .pillar-body h4 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .pillar-body p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── CTA SECTION ───────────────────────────── */
+    .cta-section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 3rem;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid rgba(109,40,217,0.35);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(109,40,217,0.18);
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(109,40,217,0.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 32px rgba(109,40,217,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 48px rgba(109,40,217,0.65);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      background: transparent;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(124,58,237,0.1);
+      border-color: var(--purple-mid);
+    }
+
+    /* ── FOOTER ────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem 5%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(148,163,184,0.45);
+    }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 768px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .security-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ───────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="index.html">EVIDA</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+    </ul>
+    <a class="btn-nav" href="onboarding.html">Get Started &rarr;</a>
+  </nav>
+
+  <!-- ── PAGE HERO ─────────────────────────────── -->
+  <section class="page-hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Purpose-Built for High-Risk Investigations
+    </div>
+    <h1>
+      Protecting Evidence.<br/>
+      <span class="gradient">Empowering Justice.</span>
+    </h1>
+    <p>
+      EVIDA is a secure, AI-powered platform designed for those who document the
+      undocumentable — helping investigators capture, protect, and build credible
+      cases from digital evidence in conflict and high-risk environments.
+    </p>
+  </section>
+
+  <!-- ── HOW IT WORKS ───────────────────────────── -->
+  <section class="section">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-heading">
+      Two tools. <span class="gradient">One seamless system.</span>
+    </h2>
+    <p class="section-sub">
+      EVIDA combines a hardened mobile app for fieldwork with a powerful desktop platform
+      for deep analysis — keeping your entire operation connected and secure.
+    </p>
+
+    <div class="how-grid">
+
+      <div class="how-card">
+        <span class="how-card-label">📱 Mobile App</span>
+        <span class="how-icon">🌍</span>
+        <h3>Capture in the Field</h3>
+        <p>
+          The EVIDA mobile app is built for investigators operating in conflict zones
+          and high-risk environments. Document incidents, record testimonies, and collect
+          evidence — even offline — with everything encrypted on-device from the moment
+          it's captured.
+        </p>
+        <ul class="how-list">
+          <li>Geo-tagged photos, videos, and audio with metadata preservation</li>
+          <li>Secure offline capture — syncs when connectivity returns</li>
+          <li>Tamper-proof timestamping to establish chain of custody</li>
+          <li>One-tap secure data wipe for emergency situations</li>
+          <li>Available on iOS and Android</li>
+        </ul>
+      </div>
+
+      <div class="how-card">
+        <span class="how-card-label">🖥 Desktop App</span>
+        <span class="how-icon">⚖️</span>
+        <h3>Analyze, Organize &amp; Build Cases</h3>
+        <p>
+          The EVIDA desktop platform is where raw evidence becomes a credible case.
+          Import field captures, run AI analysis, cross-reference findings across
+          investigations, and generate structured case files ready for legal or
+          international review.
+        </p>
+        <ul class="how-list">
+          <li>Centralized evidence archive with advanced search and tagging</li>
+          <li>AI-generated case files, summaries, and key findings</li>
+          <li>Automatic cross-referencing of related evidence and incidents</li>
+          <li>Structured exports for ICC, UN bodies, and legal partners</li>
+          <li>Role-based access for secure team collaboration</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="connector">
+      <div class="connector-line"></div>
+      <div class="connector-badge">
+        🔄 &nbsp;End-to-end encrypted sync between mobile and desktop
+      </div>
+      <div class="connector-line"></div>
+    </div>
+
+  </section>
+
+  <!-- ── WHO IT'S FOR ────────────────────────────── -->
+  <section class="section" style="padding-top: 0;">
+    <div class="section-tag">Who It's For</div>
+    <h2 class="section-heading">
+      Built for those who
+      <span class="gradient"> pursue accountability.</span>
+    </h2>
+    <p class="section-sub">
+      EVIDA is purpose-built for professionals who operate under pressure,
+      in some of the world's most sensitive and dangerous contexts.
+    </p>
+    <div class="audience-grid">
+
+      <div class="audience-card">
+        <span class="audience-icon">🕊️</span>
+        <h4>Human Rights Workers</h4>
+        <p>Document violations, protect witnesses, and build evidence-backed reports that withstand international scrutiny.</p>
+      </div>
+
+      <div class="audience-card">
+        <span class="audience-icon">📰</span>
+        <h4>Investigative Journalists</h4>
+        <p>Securely gather and archive material from conflict zones, with encrypted storage that protects sources and stories.</p>
+      </div>
+
+      <div class="audience-card">
+        <span class="audience-icon">🌐</span>
+        <h4>NGO Staff</h4>
+        <p>Coordinate field teams, standardize evidence collection, and compile organized, submission-ready documentation.</p>
+      </div>
+
+      <div class="audience-card">
+        <span class="audience-icon">⚖️</span>
+        <h4>Legal Professionals</h4>
+        <p>Build credible, well-structured case dossiers with AI-assisted organization and legally defensible audit trails.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── AI CAPABILITIES ────────────────────────── -->
+  <section class="section" style="padding-top: 0;">
+    <div class="section-tag">AI Intelligence</div>
+    <h2 class="section-heading">
+      Beyond storage —
+      <span class="gradient"> AI that thinks with you.</span>
+    </h2>
+    <p class="section-sub">
+      EVIDA's AI doesn't just store evidence. It actively helps investigators
+      understand it, connect it, and communicate it with clarity and precision.
+    </p>
+    <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📂</div>
+        <h3>Automatic Case File Generation</h3>
+        <p>
+          EVIDA's AI structures your raw evidence — linking incidents, witness accounts,
+          timelines, and documents — into coherent, submission-ready case files with
+          minimal manual effort.
+        </p>
+        <span class="chip">Powered by AI</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">🔗</div>
+        <h3>Cross-Reference Engine</h3>
+        <p>
+          Surface hidden patterns across thousands of files. EVIDA automatically connects
+          related incidents, recurring perpetrators, geographic clusters, and corroborating
+          evidence — across cases and time.
+        </p>
+        <span class="chip">AI Cross-Reference</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📋</div>
+        <h3>Key Findings Summaries</h3>
+        <p>
+          Transform large volumes of raw evidence into concise, structured summaries.
+          EVIDA distills what matters most — turning weeks of analysis into actionable
+          insights in minutes.
+        </p>
+        <span class="chip">Instant Summaries</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SECURITY & CONFIDENTIALITY ───────────────── -->
+  <div class="security-section">
+    <div class="security-inner">
+      <div class="security-text">
+        <div class="section-tag" style="margin-bottom: 1.4rem;">Security &amp; Confidentiality</div>
+        <h2>
+          The highest standard of protection — <span class="gradient">for the most sensitive work.</span>
+        </h2>
+        <p style="margin-top: 1.2rem;">
+          The evidence EVIDA handles can put lives at risk if compromised. That's why
+          every layer of the platform — from how data is captured in the field to how
+          it's stored and shared — is designed with uncompromising security
+          and strict confidentiality at its core.
+        </p>
+      </div>
+      <div class="security-pillars">
+
+        <div class="pillar">
+          <span class="pillar-icon">🔐</span>
+          <div class="pillar-body">
+            <h4>End-to-End Encryption</h4>
+            <p>All evidence is encrypted on-device before it ever leaves the field. Only authorized users with the right keys can access it.</p>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <span class="pillar-icon">🔗</span>
+          <div class="pillar-body">
+            <h4>Tamper-Proof Chain of Custody</h4>
+            <p>Every action — upload, edit, access, export — is logged with cryptographic audit trails that hold up in international courts.</p>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <span class="pillar-icon">👥</span>
+          <div class="pillar-body">
+            <h4>Role-Based Access Control</h4>
+            <p>Granular permissions ensure team members only see what they need to. Source identities and sensitive materials stay protected.</p>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <span class="pillar-icon">🛡️</span>
+          <div class="pillar-body">
+            <h4>Built for High-Risk Environments</h4>
+            <p>Secure offline mode, one-tap emergency wipe, and no data stored on third-party servers without your explicit control.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ───────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Start building accountability, today.</h2>
+      <p>
+        Join human rights investigators, journalists, NGO staff, and legal professionals
+        using EVIDA to turn raw evidence into credible, well-structured cases for justice.
+      </p>
+      <div class="cta-actions">
+        <a class="btn-primary" href="onboarding.html">Get Started &rarr;</a>
+        <a class="btn-secondary" href="demo.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          Watch Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">EVIDA</span>
+    <ul class="footer-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>
