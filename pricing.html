@@ -227,7 +227,7 @@
       gap: 1.4rem;
       max-width: 1080px;
       margin: 0 auto;
-      align-items: start;
+      align-items: stretch;
     }
 
     /* ── PRICING CARD ───────────────────────────── */
@@ -239,6 +239,8 @@
       position: relative;
       overflow: hidden;
       transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
     }
 
     .pricing-card:hover {
@@ -278,6 +280,10 @@
         0 40px 100px rgba(109,40,217,0.3);
     }
 
+    .badge-area {
+      margin-bottom: 1.6rem;
+    }
+
     .popular-badge {
       display: inline-flex;
       align-items: center;
@@ -290,7 +296,6 @@
       letter-spacing: 0.06em;
       background: linear-gradient(135deg, var(--purple-mid), var(--accent));
       color: #fff;
-      margin-bottom: 1.6rem;
     }
 
     .popular-badge::before {
@@ -395,6 +400,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
+      flex: 1;
     }
 
     .plan-features li {
@@ -606,10 +612,11 @@
 
       <!-- ── TIER 1: Field ── -->
       <div class="pricing-card">
+        <div class="badge-area"></div>
         <div class="plan-name">Field</div>
         <div class="plan-price">
           <span class="price-currency">&euro;</span>
-          <span class="price-amount">4</span>
+          <span class="price-amount" data-monthly="4" data-annual="3">4</span>
           <span class="price-period">/ month</span>
         </div>
         <p class="plan-tagline">For individual investigators and journalists getting started with digital evidence management.</p>
@@ -663,11 +670,13 @@
 
       <!-- ── TIER 2: Professional (FEATURED) ── -->
       <div class="pricing-card featured">
-        <div class="popular-badge">Most Popular</div>
+        <div class="badge-area">
+          <div class="popular-badge">Most Popular</div>
+        </div>
         <div class="plan-name">Professional</div>
         <div class="plan-price">
           <span class="price-currency">&euro;</span>
-          <span class="price-amount">10</span>
+          <span class="price-amount" data-monthly="10" data-annual="8">10</span>
           <span class="price-period">/ month</span>
         </div>
         <p class="plan-tagline">For NGO teams and legal professionals running multiple active investigations.</p>
@@ -721,10 +730,11 @@
 
       <!-- ── TIER 3: Enterprise ── -->
       <div class="pricing-card">
+        <div class="badge-area"></div>
         <div class="plan-name">Enterprise</div>
         <div class="plan-price">
           <span class="price-currency">&euro;</span>
-          <span class="price-amount">25</span>
+          <span class="price-amount" data-monthly="25" data-annual="20">25</span>
           <span class="price-period">/ month</span>
         </div>
         <p class="plan-tagline">For international organizations, legal bodies, and large investigative teams requiring the full EVIDA stack.</p>
@@ -815,6 +825,44 @@
       <div class="faq-a">Yes. Registered non-profit and humanitarian organizations may qualify for reduced pricing. <a href="#">Contact our team</a> with your organization's credentials to learn more.</div>
     </div>
   </section>
+
+  <!-- ── BILLING TOGGLE SCRIPT ───────────────────── -->
+  <script>
+    (function () {
+      const track  = document.querySelector('.toggle-track');
+      const thumb  = document.querySelector('.toggle-thumb');
+      const labels = document.querySelectorAll('.billing-toggle > span:not(.billing-badge)');
+      const amounts = document.querySelectorAll('.price-amount');
+      const periods = document.querySelectorAll('.price-period');
+
+      let annual = false;
+
+      function update() {
+        // Thumb position
+        thumb.style.transform = annual ? 'translateX(20px)' : 'translateX(0)';
+        track.style.background = annual
+          ? 'rgba(109,40,217,0.6)'
+          : 'rgba(109,40,217,0.25)';
+
+        // Label highlight
+        labels[0].style.color = annual ? 'var(--muted)' : 'var(--white)';
+        labels[1].style.color = annual ? 'var(--white)' : 'var(--muted)';
+
+        // Prices + period text
+        amounts.forEach(function (el) {
+          el.textContent = annual ? el.dataset.annual : el.dataset.monthly;
+        });
+        periods.forEach(function (el) {
+          el.textContent = annual ? '/ mo, billed annually' : '/ month';
+        });
+      }
+
+      track.addEventListener('click', function () {
+        annual = !annual;
+        update();
+      });
+    })();
+  </script>
 
   <!-- ── FOOTER ─────────────────────────────────── -->
   <footer>
