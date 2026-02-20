@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works — EVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.cdnfonts.com/css/oughter" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080812;
+      --bg-2:        #0e0e1e;
+      --bg-card:     #12122a;
+      --purple-deep: #3b0f6e;
+      --purple:      #6d28d9;
+      --purple-mid:  #7c3aed;
+      --purple-light:#a78bfa;
+      --purple-pale: #c4b5fd;
+      --accent:      #9333ea;
+      --white:       #f5f3ff;
+      --muted:       #94a3b8;
+      --border:      rgba(124,58,237,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8, 8, 18, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Oughter', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--white); }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.52rem 1.2rem;
+      background: var(--purple-mid);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-nav:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── PAGE HERO ───────────────────────────────── */
+    .page-hero {
+      position: relative;
+      padding: 160px 5% 90px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 550px;
+      background: radial-gradient(ellipse at center, rgba(109,40,217,0.3) 0%, rgba(109,40,217,0.04) 55%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.07;
+      letter-spacing: -0.04em;
+      max-width: 800px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero h1 .gradient {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 30%, #7c3aed 70%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-hero p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.75;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SHARED SECTION ──────────────────────────── */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-full {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-heading {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      max-width: 680px;
+      margin-bottom: 1rem;
+    }
+
+    .section-heading .gradient {
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── STEPS ───────────────────────────────────── */
+    .steps-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0 2rem;
+      position: relative;
+    }
+
+    .step-row:not(:last-child) .step-spine::after {
+      content: '';
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: calc(100% - 40px);
+      background: linear-gradient(to bottom, rgba(124,58,237,0.5), rgba(124,58,237,0.05));
+    }
+
+    .step-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--purple-mid);
+      background: rgba(124,58,237,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--purple-pale);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 24px rgba(124,58,237,0.2);
+    }
+
+    .step-body {
+      padding: 0 0 4rem 0;
+    }
+
+    .step-body h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.7rem;
+      margin-top: 0.75rem;
+    }
+
+    .step-body p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 620px;
+    }
+
+    .step-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .step-chip {
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+    }
+
+    /* ── TWO TOOLS GRID ──────────────────────────── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.6rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple-mid), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tool-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 64px rgba(109,40,217,0.18);
+    }
+
+    .tool-card:hover::before { opacity: 1; }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.28rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(109,40,217,0.12);
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      margin-bottom: 1.6rem;
+    }
+
+    .tool-icon {
+      font-size: 2.4rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .tool-card h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.85rem;
+    }
+
+    .tool-card p {
+      font-size: 0.91rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.8rem;
+    }
+
+    .tool-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .tool-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tool-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      flex-shrink: 0;
+      margin-top: 0.46rem;
+    }
+
+    .connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      gap: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .connector-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 140px;
+    }
+
+    .connector-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.4rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    /* ── ENCRYPTION ANIMATION ────────────────────── */
+    .encryption-section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 5%;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .encryption-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .encryption-text .section-heading {
+      margin-bottom: 1.2rem;
+    }
+
+    .encryption-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .encryption-visual {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .enc-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-family: 'Courier New', monospace;
+      color: var(--muted);
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .enc-row .enc-label {
+      color: var(--purple-pale);
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+      width: 70px;
+    }
+
+    .enc-row .enc-value {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.7;
+    }
+
+    .enc-row .enc-lock {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .enc-row.active {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(124,58,237,0.07);
+    }
+
+    .enc-row.active .enc-value {
+      color: var(--purple-pale);
+      opacity: 1;
+    }
+
+    .enc-shimmer {
+      position: absolute;
+      top: 0; bottom: 0; left: -100%;
+      width: 60%;
+      background: linear-gradient(90deg, transparent, rgba(124,58,237,0.12), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      100% { left: 110%; }
+    }
+
+    .enc-status {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 1.2rem;
+      padding: 0.75rem 1.1rem;
+      background: rgba(16,185,129,0.07);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6ee7b7;
+    }
+
+    .enc-status .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16,185,129,0.6);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* ── AI CAPABILITIES ─────────────────────────── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .ai-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .ai-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(109,40,217,0.06), transparent);
+      pointer-events: none;
+    }
+
+    .ai-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(109,40,217,0.18);
+    }
+
+    .ai-card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.3rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid rgba(109,40,217,0.2);
+    }
+
+    .ai-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .ai-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.2rem 0.7rem;
+      background: rgba(109,40,217,0.1);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+    }
+
+    /* ── CTA ─────────────────────────────────────── */
+    .cta-section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 3rem;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid rgba(109,40,217,0.35);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(109,40,217,0.18);
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(109,40,217,0.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 32px rgba(109,40,217,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 48px rgba(109,40,217,0.65);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      background: transparent;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(124,58,237,0.1);
+      border-color: var(--purple-mid);
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem 5%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(148,163,184,0.45);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .encryption-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .step-row { grid-template-columns: 52px 1fr; gap: 0 1.2rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ───────────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="index.html">EVIDA</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="how-it-works.html" class="active">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a class="btn-nav" href="onboarding.html">Get Started &rarr;</a>
+  </nav>
+
+  <!-- ── PAGE HERO ────────────────────────────────── -->
+  <section class="page-hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      From Field to Courtroom
+    </div>
+    <h1>
+      Evidence captured.<br/>
+      <span class="gradient">Cases built. Justice pursued.</span>
+    </h1>
+    <p>
+      EVIDA is a two-part system — a hardened mobile app for field collection and a
+      powerful desktop platform for analysis — connected by end-to-end encryption
+      and guided at every step by AI.
+    </p>
+  </section>
+
+  <!-- ── STEP-BY-STEP WORKFLOW ─────────────────────── -->
+  <section class="section">
+    <div class="section-tag">The Workflow</div>
+    <h2 class="section-heading">
+      Four steps from <span class="gradient">incident to case file.</span>
+    </h2>
+    <p class="section-sub">
+      Every EVIDA investigation follows a structured, secure path — from the moment
+      evidence is captured in the field to the moment a case file is submitted.
+    </p>
+
+    <div class="steps-wrapper">
+
+      <div class="step-row">
+        <div class="step-spine">
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-body">
+          <h3>Capture in the Field</h3>
+          <p>
+            Open the EVIDA mobile app and document what you see — photos, video,
+            audio testimony, written notes. All evidence is geo-tagged, timestamped,
+            and encrypted on-device the instant it's recorded. No internet connection
+            required; everything queues locally until a secure sync window opens.
+          </p>
+          <div class="step-chips">
+            <span class="step-chip">📍 Geo-tagging</span>
+            <span class="step-chip">🔒 On-device encryption</span>
+            <span class="step-chip">📶 Offline-first</span>
+            <span class="step-chip">⏱ Tamper-proof timestamps</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-spine">
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-body">
+          <h3>Sync Securely to the Desktop</h3>
+          <p>
+            When a secure connection is available, EVIDA syncs your field captures
+            to the desktop platform over an end-to-end encrypted channel. Every file
+            transfer is logged with a cryptographic audit entry — establishing an
+            unbroken chain of custody from the moment of capture.
+          </p>
+          <div class="step-chips">
+            <span class="step-chip">🔄 Encrypted sync</span>
+            <span class="step-chip">📋 Chain of custody log</span>
+            <span class="step-chip">🛡 Zero-knowledge transfer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-spine">
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-body">
+          <h3>Analyze &amp; Cross-Reference with AI</h3>
+          <p>
+            On the desktop, EVIDA's AI engine processes your evidence — identifying
+            patterns, surfacing connections between incidents, flagging corroborating
+            materials, and building a structured timeline. What would take weeks of
+            manual analysis is surfaced in minutes, without sacrificing accuracy.
+          </p>
+          <div class="step-chips">
+            <span class="step-chip">🔗 Cross-reference engine</span>
+            <span class="step-chip">🧠 Pattern detection</span>
+            <span class="step-chip">📅 Automated timelines</span>
+            <span class="step-chip">📋 Key findings summaries</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-spine">
+          <div class="step-num">4</div>
+        </div>
+        <div class="step-body">
+          <h3>Export a Submission-Ready Case File</h3>
+          <p>
+            Generate structured, legally defensible case files formatted for ICC
+            submissions, UN reporting bodies, and legal partners. Every export carries
+            a full audit trail and can be shared securely with role-based access
+            controls — so only the right people see the right materials.
+          </p>
+          <div class="step-chips">
+            <span class="step-chip">⚖️ ICC &amp; UN formats</span>
+            <span class="step-chip">👥 Role-based access</span>
+            <span class="step-chip">📤 Secure export</span>
+            <span class="step-chip">🗂 Full audit trail</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── TWO TOOLS ─────────────────────────────────── -->
+  <section class="section-full" style="background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="section-tag">The Platform</div>
+      <h2 class="section-heading">
+        Two tools. <span class="gradient">One seamless system.</span>
+      </h2>
+      <p class="section-sub">
+        EVIDA is built as a tightly integrated pair — each tool purpose-built for
+        its environment, designed to work together without friction.
+      </p>
+
+      <div class="tools-grid">
+
+        <div class="tool-card">
+          <span class="tool-badge">📱 Mobile App</span>
+          <span class="tool-icon">🌍</span>
+          <h3>Built for the Field</h3>
+          <p>
+            The EVIDA mobile app is designed for investigators operating in conflict zones
+            and high-pressure environments. It works without internet, protects data
+            on-device, and can be wiped instantly if the situation demands it.
+          </p>
+          <ul class="tool-list">
+            <li>Geo-tagged photos, video, and audio with full metadata preservation</li>
+            <li>Secure offline capture — syncs automatically when connectivity returns</li>
+            <li>Tamper-proof timestamping to establish chain of custody from first capture</li>
+            <li>One-tap emergency data wipe for high-risk situations</li>
+            <li>Witness testimony recording with encrypted transcription</li>
+            <li>Available on iOS and Android</li>
+          </ul>
+        </div>
+
+        <div class="tool-card">
+          <span class="tool-badge">🖥 Desktop Platform</span>
+          <span class="tool-icon">⚖️</span>
+          <h3>Built for the Case Room</h3>
+          <p>
+            The EVIDA desktop platform is where raw evidence becomes a credible case.
+            Import field captures, run AI analysis, collaborate with your team, and
+            generate structured case files ready for legal or international review.
+          </p>
+          <ul class="tool-list">
+            <li>Centralized evidence archive with advanced search, filtering, and tagging</li>
+            <li>AI-generated case files, incident summaries, and key findings reports</li>
+            <li>Automatic cross-referencing across incidents, locations, and timeframes</li>
+            <li>Structured exports formatted for ICC, UN bodies, and legal partners</li>
+            <li>Role-based team access with granular permission controls</li>
+            <li>Full cryptographic audit log of every action taken</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="connector">
+        <div class="connector-line"></div>
+        <div class="connector-badge">
+          🔄 &nbsp;End-to-end encrypted sync between mobile and desktop
+        </div>
+        <div class="connector-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ENCRYPTION ANIMATION ──────────────────────── -->
+  <div class="encryption-section">
+    <div class="encryption-inner">
+      <div class="encryption-text">
+        <div class="section-tag" style="margin-bottom: 1.4rem;">Security by Design</div>
+        <h2 class="section-heading">
+          Encrypted from the<br/>
+          <span class="gradient">first byte captured.</span>
+        </h2>
+        <p style="margin-top: 1.2rem;">
+          Evidence handled by EVIDA is encrypted on the device before it ever
+          leaves the field. Data is never stored in plaintext — not during capture,
+          not during transfer, not at rest. Only authorized users with the correct
+          cryptographic keys can access it.
+        </p>
+        <p style="margin-top: 1rem;">
+          Every action — upload, access, edit, export — is written to an immutable
+          audit log with a cryptographic signature, creating a tamper-proof chain
+          of custody that holds up in international courts.
+        </p>
+      </div>
+
+      <div class="encryption-visual">
+        <div class="enc-row active">
+          <div class="enc-shimmer"></div>
+          <span class="enc-label">Photo</span>
+          <span class="enc-value">AES-256 · a3f9d2c1b8e047...</span>
+          <span class="enc-lock">🔐</span>
+        </div>
+        <div class="enc-row active">
+          <div class="enc-shimmer" style="animation-delay: 0.4s;"></div>
+          <span class="enc-label">Video</span>
+          <span class="enc-value">AES-256 · 7b2e9a4c0d1f83...</span>
+          <span class="enc-lock">🔐</span>
+        </div>
+        <div class="enc-row active">
+          <div class="enc-shimmer" style="animation-delay: 0.8s;"></div>
+          <span class="enc-label">Testimony</span>
+          <span class="enc-value">AES-256 · c5d8f3a2e6b091...</span>
+          <span class="enc-lock">🔐</span>
+        </div>
+        <div class="enc-row active">
+          <div class="enc-shimmer" style="animation-delay: 1.2s;"></div>
+          <span class="enc-label">Location</span>
+          <span class="enc-value">AES-256 · 1e4a7f9b2c5d68...</span>
+          <span class="enc-lock">🔐</span>
+        </div>
+        <div class="enc-row active">
+          <div class="enc-shimmer" style="animation-delay: 1.6s;"></div>
+          <span class="enc-label">Metadata</span>
+          <span class="enc-value">AES-256 · 8d0c6e3b9f4a12...</span>
+          <span class="enc-lock">🔐</span>
+        </div>
+        <div class="enc-status">
+          <span class="dot"></span>
+          All evidence encrypted on-device · Chain of custody active
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI CAPABILITIES ───────────────────────────── -->
+  <section class="section">
+    <div class="section-tag">AI Intelligence</div>
+    <h2 class="section-heading">
+      Beyond storage —
+      <span class="gradient"> AI that thinks with you.</span>
+    </h2>
+    <p class="section-sub">
+      EVIDA's AI doesn't just store evidence. It actively helps investigators
+      understand it, connect it, and communicate it with clarity and precision.
+    </p>
+    <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📂</div>
+        <h3>Automatic Case File Generation</h3>
+        <p>
+          EVIDA's AI structures your raw evidence — linking incidents, witness accounts,
+          timelines, and documents — into coherent, submission-ready case files with
+          minimal manual effort.
+        </p>
+        <span class="chip">Powered by AI</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">🔗</div>
+        <h3>Cross-Reference Engine</h3>
+        <p>
+          Surface hidden patterns across thousands of files. EVIDA automatically connects
+          related incidents, recurring perpetrators, geographic clusters, and corroborating
+          evidence — across cases and time.
+        </p>
+        <span class="chip">AI Cross-Reference</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📋</div>
+        <h3>Key Findings Summaries</h3>
+        <p>
+          Transform large volumes of raw evidence into concise, structured summaries.
+          EVIDA distills what matters most — turning weeks of analysis into actionable
+          insights in minutes.
+        </p>
+        <span class="chip">Instant Summaries</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Ready to see it in action?</h2>
+      <p>
+        Watch a live walkthrough of EVIDA from field capture to finished case file,
+        or get started and see how it fits your investigation workflow.
+      </p>
+      <div class="cta-actions">
+        <a class="btn-primary" href="onboarding.html">Get Started &rarr;</a>
+        <a class="btn-secondary" href="demo.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          Watch Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">EVIDA</span>
+    <ul class="footer-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>
