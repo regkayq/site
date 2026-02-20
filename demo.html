@@ -483,6 +483,400 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* ── PAGE PANELS ───────────────────────────── */
+    .page-panel {
+      display: none;
+      opacity: 0;
+    }
+    .page-panel.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ── PANEL HEADERS ─────────────────────────── */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .panel-subtitle {
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .panel-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.42rem 1rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .panel-action-btn:hover { opacity: 0.85; }
+
+    /* ── FILTER CHIPS ──────────────────────────── */
+    .filter-chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .filter-chip {
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .filter-chip.active,
+    .filter-chip:hover {
+      background: rgba(109,40,217,0.2);
+      color: var(--purple-pale);
+      border-color: rgba(124,58,237,0.4);
+    }
+
+    /* ── EVIDENCE GRID ─────────────────────────── */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 1100px) { .evidence-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .ev-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: border-color 0.2s;
+    }
+
+    .ev-card:hover { border-color: rgba(124,58,237,0.35); }
+
+    .ev-thumb {
+      width: 42px; height: 42px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .ev-info { flex: 1; min-width: 0; }
+
+    .ev-fname {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ev-meta {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .ev-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+
+    /* ── WITNESS LIST ──────────────────────────── */
+    .witness-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .witness-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .witness-row:hover { border-color: rgba(124,58,237,0.3); }
+
+    .witness-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(109,40,217,0.35), rgba(147,51,234,0.2));
+      border: 1px solid rgba(124,58,237,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      flex-shrink: 0;
+    }
+
+    .witness-info { flex: 1; }
+
+    .witness-id {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .witness-case {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.05rem;
+    }
+
+    .wstatus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .wstatus-interviewed { background: rgba(20,184,166,0.15); color: #5eead4; }
+    .wstatus-scheduled   { background: rgba(109,40,217,0.2);  color: #a78bfa; }
+    .wstatus-pending     { background: rgba(148,163,184,0.1); color: #94a3b8; }
+    .wstatus-protected   { background: rgba(234,179,8,0.12);  color: #fde047; }
+
+    /* ── AI ANALYSIS PANEL ─────────────────────── */
+    .ai-insights-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .ai-insight-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(109,40,217,0.25);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--accent));
+      opacity: 0.7;
+    }
+
+    .insight-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .insight-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.18);
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .insight-conf {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #5eead4;
+    }
+
+    .insight-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+
+    .insight-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .insight-cases {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+    }
+
+    .insight-case-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.15);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(124,58,237,0.2);
+    }
+
+    /* ── REPORTS LIST ──────────────────────────── */
+    .reports-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .report-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .report-row:hover { border-color: rgba(124,58,237,0.3); }
+
+    .report-icon {
+      width: 38px; height: 38px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      background: rgba(20,184,166,0.12);
+    }
+
+    .report-meta { flex: 1; }
+
+    .report-name {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .report-detail {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.08rem;
+    }
+
+    .report-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.18s;
+    }
+
+    .report-download:hover { background: rgba(109,40,217,0.22); }
+
+    /* ── DEMO CURSOR ───────────────────────────── */
+    #demo-cursor {
+      position: fixed;
+      width: 22px;
+      height: 26px;
+      pointer-events: none;
+      z-index: 9999;
+      transform-origin: 2px 2px;
+      transition: left 0.72s cubic-bezier(0.25, 1, 0.5, 1),
+                  top  0.72s cubic-bezier(0.25, 1, 0.5, 1);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    #demo-cursor.clicking {
+      animation: cursorClick 0.2s ease forwards;
+    }
+
+    @keyframes cursorClick {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(0.82); }
+      100% { transform: scale(1); }
+    }
+
+    .cursor-ripple {
+      position: fixed;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(124,58,237,0.7);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%) scale(0);
+      animation: rippleOut 0.5s ease forwards;
+    }
+
+    @keyframes rippleOut {
+      0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+
+    /* nav item hover highlight from cursor */
+    .nav-item.demo-hover {
+      background: rgba(109,40,217,0.1);
+      color: var(--white);
+    }
+
+    /* tab button hover from cursor */
+    .tab-btn.demo-hover {
+      color: var(--white);
+    }
+
     /* ── CASES TABLE ───────────────────────────── */
     .cases-table {
       width: 100%;
@@ -783,7 +1177,7 @@
     <nav class="sidebar-nav">
       <span class="nav-section-label">Workspace</span>
 
-      <a class="nav-item active" href="#">
+      <a class="nav-item active" href="#" data-page="dashboard">
         <!-- grid icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
@@ -792,7 +1186,7 @@
         Dashboard
       </a>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="investigations">
         <!-- folder icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
@@ -800,7 +1194,7 @@
         Investigations
       </a>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="evidence">
         <!-- archive icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/>
@@ -809,7 +1203,7 @@
         Evidence
       </a>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="witnesses">
         <!-- users icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -821,7 +1215,7 @@
 
       <span class="nav-section-label">Intelligence</span>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="ai-analysis">
         <!-- sparkle / AI icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -829,7 +1223,7 @@
         AI Analysis
       </a>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="case-reports">
         <!-- file-text icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -901,8 +1295,8 @@
       </div>
     </header>
 
-    <!-- Page content -->
-    <div class="page-content">
+    <!-- Page content panels -->
+    <div class="page-content page-panel active" data-panel="dashboard">
 
       <!-- Stats -->
       <div class="stats-row">
@@ -1169,10 +1563,233 @@
         </div>
       </div>
 
-    </div><!-- /page-content -->
+    </div><!-- /panel: dashboard -->
+
+    <!-- ── INVESTIGATIONS PANEL ──────────────────── -->
+    <div class="page-content page-panel" data-panel="investigations">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Investigations</div>
+          <div class="panel-subtitle">7 total &bull; 4 active &bull; 2 in review</div>
+        </div>
+        <button class="panel-action-btn">+ New Case</button>
+      </div>
+      <table class="cases-table">
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Region</th>
+            <th>Opened</th>
+            <th>Lead Investigator</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji purple">📁</div><div class="case-name-cell"><div class="case-title">Northern Syria Airstrike</div><div class="case-id">INV-004</div></div></div></td>
+            <td><span class="updated-text">Idlib, Syria</span></td>
+            <td><span class="updated-text">14 Jan 2026</span></td>
+            <td><span class="updated-text">A. Rodriguez</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji purple">📁</div><div class="case-name-cell"><div class="case-title">Zaporizhzhia Infrastructure Attack</div><div class="case-id">INV-011</div></div></div></td>
+            <td><span class="updated-text">Zaporizhzhia, Ukraine</span></td>
+            <td><span class="updated-text">2 Feb 2026</span></td>
+            <td><span class="updated-text">M. Chen</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji amber">📁</div><div class="case-name-cell"><div class="case-title">Bucha Residential District</div><div class="case-id">INV-007</div></div></div></td>
+            <td><span class="updated-text">Bucha, Ukraine</span></td>
+            <td><span class="updated-text">8 Nov 2025</span></td>
+            <td><span class="updated-text">A. Rodriguez</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji teal">⚖️</div><div class="case-name-cell"><div class="case-title">Detained Civilians — Kharkiv Region</div><div class="case-id">INV-009</div></div></div></td>
+            <td><span class="updated-text">Kharkiv, Ukraine</span></td>
+            <td><span class="updated-text">3 Dec 2025</span></td>
+            <td><span class="updated-text">S. Okafor</span></td>
+            <td><span class="case-status status-review"><span class="sdot"></span>In Review</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji rose">🗂️</div><div class="case-name-cell"><div class="case-title">Mariupol Port District Survey</div><div class="case-id">INV-002</div></div></div></td>
+            <td><span class="updated-text">Mariupol, Ukraine</span></td>
+            <td><span class="updated-text">17 Jun 2025</span></td>
+            <td><span class="updated-text">M. Chen</span></td>
+            <td><span class="case-status status-archived"><span class="sdot"></span>Archived</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- /panel: investigations -->
+
+    <!-- ── EVIDENCE PANEL ─────────────────────────── -->
+    <div class="page-content page-panel" data-panel="evidence">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Evidence Archive</div>
+          <div class="panel-subtitle">4,217 items across 7 cases</div>
+        </div>
+        <button class="panel-action-btn">+ Add Evidence</button>
+      </div>
+      <div class="filter-chips">
+        <button class="filter-chip active">All (4,217)</button>
+        <button class="filter-chip">Photo (2,341)</button>
+        <button class="filter-chip">Video (891)</button>
+        <button class="filter-chip">Audio (203)</button>
+        <button class="filter-chip">Document (782)</button>
+      </div>
+      <div class="evidence-grid">
+        <div class="ev-card"><div class="ev-thumb video" style="background:rgba(225,29,72,0.15)">🎥</div><div class="ev-info"><div class="ev-fname">VID_20260219_143211.mp4</div><div class="ev-meta">Video &bull; 87.4 MB &bull; Feb 19, 2026</div><span class="ev-tag">INV-004</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(109,40,217,0.18)">📷</div><div class="ev-info"><div class="ev-fname">IMG_4821_airstrike_site.jpg</div><div class="ev-meta">Photo &bull; 4.2 MB &bull; Feb 19, 2026</div><span class="ev-tag">INV-004</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(234,179,8,0.12)">🎙️</div><div class="ev-info"><div class="ev-fname">testimony_recording_03.m4a</div><div class="ev-meta">Audio &bull; 12.1 MB &bull; Feb 18, 2026</div><span class="ev-tag">INV-009</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(20,184,166,0.12)">📄</div><div class="ev-info"><div class="ev-fname">site_map_kharkiv_north.pdf</div><div class="ev-meta">Document &bull; 2.8 MB &bull; Feb 17, 2026</div><span class="ev-tag">INV-009</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(109,40,217,0.18)">📷</div><div class="ev-info"><div class="ev-fname">IMG_4833_infrastructure.jpg</div><div class="ev-meta">Photo &bull; 3.7 MB &bull; Feb 16, 2026</div><span class="ev-tag">INV-011</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(20,184,166,0.12)">📄</div><div class="ev-info"><div class="ev-fname">witness_statement_W-021.pdf</div><div class="ev-meta">Document &bull; 1.1 MB &bull; Feb 15, 2026</div><span class="ev-tag">INV-007</span></div></div>
+      </div>
+    </div><!-- /panel: evidence -->
+
+    <!-- ── WITNESSES PANEL ────────────────────────── -->
+    <div class="page-content page-panel" data-panel="witnesses">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Witness Registry</div>
+          <div class="panel-subtitle">23 registered &bull; 14 interviewed &bull; 9 pending</div>
+        </div>
+        <button class="panel-action-btn">+ Add Witness</button>
+      </div>
+      <div class="witness-list">
+        <div class="witness-row">
+          <div class="witness-avatar">W21</div>
+          <div class="witness-info"><div class="witness-id">Witness A-21 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult male</span></div><div class="witness-case">INV-004 &bull; Northern Syria Airstrike</div></div>
+          <span class="wstatus-pill wstatus-interviewed"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Interviewed</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W17</div>
+          <div class="witness-info"><div class="witness-id">Witness B-17 &bull; <span style="font-weight:400;color:var(--muted)">Medical staff</span></div><div class="witness-case">INV-007 &bull; Bucha Residential District</div></div>
+          <span class="wstatus-pill wstatus-scheduled"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Scheduled</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W09</div>
+          <div class="witness-info"><div class="witness-id">Witness C-09 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult female</span></div><div class="witness-case">INV-009 &bull; Detained Civilians — Kharkiv</div></div>
+          <span class="wstatus-pill wstatus-protected"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Protected</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W33</div>
+          <div class="witness-info"><div class="witness-id">Witness D-33 &bull; <span style="font-weight:400;color:var(--muted)">First responder</span></div><div class="witness-case">INV-011 &bull; Zaporizhzhia Infrastructure</div></div>
+          <span class="wstatus-pill wstatus-pending">Pending</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W05</div>
+          <div class="witness-info"><div class="witness-id">Witness E-05 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult male</span></div><div class="witness-case">INV-004 &bull; Northern Syria Airstrike</div></div>
+          <span class="wstatus-pill wstatus-interviewed"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Interviewed</span>
+        </div>
+      </div>
+    </div><!-- /panel: witnesses -->
+
+    <!-- ── AI ANALYSIS PANEL ──────────────────────── -->
+    <div class="page-content page-panel" data-panel="ai-analysis">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">AI Intelligence</div>
+          <div class="panel-subtitle">124 insights generated &bull; 6 new this session</div>
+        </div>
+        <div class="mobile-pill" style="margin:0"><span class="dot"></span><span>Analysis running</span></div>
+      </div>
+      <div class="ai-insights-grid">
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Cross-Reference</span>
+            <span class="insight-conf">97% confidence</span>
+          </div>
+          <div class="insight-title">3 witness accounts corroborate airstrike trajectory</div>
+          <div class="insight-desc">Testimonies from Witness A-21, A-14, and B-03 describe consistent northern approach vector. Geolocation data from 2 video files confirms impact coordinates within 80m radius.</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-004</span><span class="insight-case-tag">W-21</span><span class="insight-case-tag">W-14</span><span class="insight-case-tag">W-03</span></div>
+        </div>
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Pattern Detection</span>
+            <span class="insight-conf">89% confidence</span>
+          </div>
+          <div class="insight-title">Infrastructure targeting pattern identified across 2 cases</div>
+          <div class="insight-desc">Structural damage signatures in INV-011 satellite imagery match documented patterns from INV-004. Both incidents show targeting of civilian power infrastructure during peak usage hours (06:00–09:00 local).</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-011</span><span class="insight-case-tag">INV-004</span></div>
+        </div>
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Risk Assessment</span>
+            <span class="insight-conf">High priority</span>
+          </div>
+          <div class="insight-title">Witness C-09 protection level recommended upgrade</div>
+          <div class="insight-desc">Social graph analysis indicates potential identification risk based on recent regional data. Recommend escalating from standard to enhanced protection protocol pending case team review.</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-009</span><span class="insight-case-tag">W-09</span></div>
+        </div>
+      </div>
+    </div><!-- /panel: ai-analysis -->
+
+    <!-- ── CASE REPORTS PANEL ─────────────────────── -->
+    <div class="page-content page-panel" data-panel="case-reports">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Case Reports</div>
+          <div class="panel-subtitle">12 reports generated &bull; 3 pending review</div>
+        </div>
+        <button class="panel-action-btn">+ Generate Report</button>
+      </div>
+      <div class="reports-list">
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-004 Interim Evidence Summary — Feb 2026</div>
+            <div class="report-detail">PDF &bull; 2.4 MB &bull; Generated Feb 19, 2026 &bull; Northern Syria Airstrike</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-009 Witness Testimony Compilation</div>
+            <div class="report-detail">PDF &bull; 1.8 MB &bull; Generated Feb 17, 2026 &bull; Kharkiv Region</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-011 Infrastructure Damage Assessment</div>
+            <div class="report-detail">PDF &bull; 3.1 MB &bull; Generated Feb 15, 2026 &bull; Zaporizhzhia</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-002 Final Case Report — Archived</div>
+            <div class="report-detail">PDF &bull; 5.7 MB &bull; Generated Jan 29, 2026 &bull; Mariupol Port District</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+      </div>
+    </div><!-- /panel: case-reports -->
+
   </div><!-- /main -->
 
+  <!-- Demo cursor -->
+  <div id="demo-cursor">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 26" fill="none">
+      <path d="M3 2L3 20L7.5 15.5L10.2 23L13 22L10.2 14L17 14Z" fill="white" stroke="#1a0a3a" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
   <script>
+    /* ── Manual tab clicks ──────────────────────── */
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1181,6 +1798,168 @@
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
     });
+
+    /* ── Manual nav clicks ──────────────────────── */
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        activatePanel(item.dataset.page);
+      });
+    });
+
+    function activatePanel(page) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+      if (navItem) navItem.classList.add('active');
+
+      // Hide all panels instantly
+      document.querySelectorAll('.page-panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+        p.style.opacity = '0';
+        p.style.transform = 'translateY(10px)';
+        p.style.transition = '';
+      });
+
+      const panel = document.querySelector(`.page-panel[data-panel="${page}"]`);
+      if (panel) {
+        panel.style.display = 'block';
+        panel.style.opacity = '0';
+        panel.style.transform = 'translateY(10px)';
+        panel.classList.add('active');
+        document.querySelector('.main').scrollTop = 0;
+        // Animate in on next frame
+        requestAnimationFrame(() => {
+          panel.style.transition = 'opacity 0.32s cubic-bezier(0.16,1,0.3,1), transform 0.32s cubic-bezier(0.16,1,0.3,1)';
+          panel.style.opacity = '1';
+          panel.style.transform = 'translateY(0)';
+        });
+      }
+    }
+
+    /* ── Demo cursor animation ──────────────────── */
+    const cursor = document.getElementById('demo-cursor');
+
+    function moveCursor(x, y) {
+      cursor.style.left = x + 'px';
+      cursor.style.top  = y + 'px';
+    }
+
+    function spawnRipple(x, y) {
+      const r = document.createElement('div');
+      r.className = 'cursor-ripple';
+      r.style.left = (x + 4) + 'px';
+      r.style.top  = (y + 4) + 'px';
+      document.body.appendChild(r);
+      setTimeout(() => r.remove(), 550);
+    }
+
+    function clickCursor(x, y) {
+      cursor.classList.remove('clicking');
+      void cursor.offsetWidth; // reflow to re-trigger animation
+      cursor.classList.add('clicking');
+      spawnRipple(x, y);
+      cursor.addEventListener('animationend', () => cursor.classList.remove('clicking'), { once: true });
+    }
+
+    // Demo sequence: nav items to click, then tab sequence inside dashboard
+    const navSequence = [
+      'investigations',
+      'evidence',
+      'witnesses',
+      'ai-analysis',
+      'case-reports',
+      'dashboard',
+    ];
+
+    // After landing on dashboard, also animate between tabs
+    const tabSequence = [
+      { tab: 'tab-uploads', label: 'Pending Upload' },
+      { tab: 'tab-cases',   label: 'Latest Cases'  },
+    ];
+
+    let navIdx  = 0;
+    let paused  = false;
+
+    // Hide cursor offscreen initially
+    moveCursor(-100, -100);
+
+    function wait(ms) {
+      return new Promise(res => setTimeout(res, ms));
+    }
+
+    async function clickNavItem(page) {
+      const el = document.querySelector(`.nav-item[data-page="${page}"]`);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const tx = rect.left + 10;
+      const ty = rect.top  + rect.height / 2 - 4;
+
+      // hover highlight
+      el.classList.add('demo-hover');
+      moveCursor(tx, ty);
+      await wait(750); // cursor travel time
+
+      // click
+      clickCursor(tx, ty);
+      el.classList.remove('demo-hover');
+      activatePanel(page);
+      await wait(150);
+    }
+
+    async function clickTabBtn(tabId) {
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const tx = rect.left + rect.width / 2 - 4;
+      const ty = rect.top  + rect.height / 2 - 4;
+
+      btn.classList.add('demo-hover');
+      moveCursor(tx, ty);
+      await wait(700);
+
+      clickCursor(tx, ty);
+      btn.classList.remove('demo-hover');
+
+      // trigger tab switch
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      await wait(150);
+    }
+
+    async function runDemoLoop() {
+      await wait(1200); // initial pause before first move
+
+      while (true) {
+        if (paused) { await wait(400); continue; }
+
+        const page = navSequence[navIdx];
+        await clickNavItem(page);
+
+        if (page === 'dashboard') {
+          // pause on dashboard, then animate tabs
+          await wait(1800);
+          for (const t of tabSequence) {
+            if (paused) break;
+            await clickTabBtn(t.tab);
+            await wait(2000);
+          }
+          await wait(600);
+        } else {
+          await wait(2800);
+        }
+
+        navIdx = (navIdx + 1) % navSequence.length;
+      }
+    }
+
+    // Pause demo on user hover over sidebar
+    document.querySelector('.sidebar').addEventListener('mouseenter', () => { paused = true; });
+    document.querySelector('.sidebar').addEventListener('mouseleave', () => { paused = false; });
+
+    runDemoLoop();
   </script>
 
 </body>
