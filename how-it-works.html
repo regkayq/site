@@ -1403,5 +1403,38 @@
     <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
   </footer>
 
+  <script>
+    // Restart a set of elements' CSS animations by forcing a reflow cycle
+    function restartAnims(els) {
+      els.forEach(function(el) {
+        el.style.animation = 'none';
+        el.offsetWidth; // trigger reflow
+        el.style.animation = '';
+      });
+    }
+
+    // Encryption bars: last bar (delay 1.5s + duration 1.6s) finishes at 3.1s
+    // 2.5s pause → loop every 5600ms
+    (function encLoop() {
+      setTimeout(function() {
+        restartAnims(
+          Array.from(document.querySelectorAll('.enc-bar-fill, .enc-lock'))
+        );
+        encLoop();
+      }, 5600);
+    })();
+
+    // Processing bars: longest (video, 3s duration, 0s delay) finishes at 3s
+    // 2.5s pause → loop every 5500ms
+    (function procLoop() {
+      setTimeout(function() {
+        restartAnims(
+          Array.from(document.querySelectorAll('.proc-bar-fill'))
+        );
+        procLoop();
+      }, 5500);
+    })();
+  </script>
+
 </body>
 </html>
