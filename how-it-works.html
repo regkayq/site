@@ -1068,10 +1068,10 @@
           <div class="proc-file-info">
             <div class="proc-file-name">field-recording-2024-11-03.mp4 · 6h 14m</div>
             <div class="proc-bar-track">
-              <div class="proc-bar-fill" style="animation-duration: 3s;"></div>
+              <div class="proc-bar-fill" style="animation-duration: 3s; animation-delay: 0s;"></div>
             </div>
           </div>
-          <span class="proc-file-status done">✓ Done</span>
+          <span class="proc-file-status active">Processing…</span>
         </div>
 
         <!-- extracted frames -->
@@ -1103,7 +1103,7 @@
               <div class="proc-bar-fill" style="animation-duration: 2.2s; animation-delay: 0.5s;"></div>
             </div>
           </div>
-          <span class="proc-file-status done">✓ Done</span>
+          <span class="proc-file-status active">Processing…</span>
         </div>
 
         <!-- docs -->
@@ -1404,7 +1404,6 @@
   </footer>
 
   <script>
-    // Restart a set of elements' CSS animations by forcing a reflow cycle
     function restartAnims(els) {
       els.forEach(function(el) {
         el.style.animation = 'none';
@@ -1413,26 +1412,50 @@
       });
     }
 
-    // Encryption bars: last bar (delay 1.5s + duration 1.6s) finishes at 3.1s
-    // 2.5s pause → loop every 5600ms
-    (function encLoop() {
-      setTimeout(function() {
-        restartAnims(
-          Array.from(document.querySelectorAll('.enc-bar-fill, .enc-lock'))
-        );
-        encLoop();
-      }, 5600);
-    })();
+    // ── Processing bars + status labels ─────────────
+    var procRows = Array.from(document.querySelectorAll('.proc-file-row'));
+    var procStatusTimers = [];
 
-    // Processing bars: longest (video, 3s duration, 0s delay) finishes at 3s
-    // 2.5s pause → loop every 5500ms
+    function startProcCycle() {
+      procRows.forEach(function(row) {
+        var fill   = row.querySelector('.proc-bar-fill');
+        var status = row.querySelector('.proc-file-status');
+        if (!fill || !status) return;
+
+        var dur = parseFloat(fill.style.animationDuration || '2.4') * 1000;
+        var del = parseFloat(fill.style.animationDelay   || '0')   * 1000;
+
+        status.textContent = 'Processing…';
+        status.className   = 'proc-file-status active';
+
+        var t = setTimeout(function() {
+          status.textContent = '✓ Done';
+          status.className   = 'proc-file-status done';
+        }, dur + del);
+
+        procStatusTimers.push(t);
+      });
+    }
+
+    // Longest bar: 3s duration + 0s delay = 3s. 2.5s pause → loop every 5500ms
+    startProcCycle();
     (function procLoop() {
       setTimeout(function() {
-        restartAnims(
-          Array.from(document.querySelectorAll('.proc-bar-fill'))
-        );
+        procStatusTimers.forEach(clearTimeout);
+        procStatusTimers = [];
+        restartAnims(Array.from(document.querySelectorAll('.proc-bar-fill')));
+        startProcCycle();
         procLoop();
       }, 5500);
+    })();
+
+    // ── Encryption bars ──────────────────────────────
+    // Last bar: delay 1.5s + duration 1.6s = 3.1s. 2.5s pause → loop every 5600ms
+    (function encLoop() {
+      setTimeout(function() {
+        restartAnims(Array.from(document.querySelectorAll('.enc-bar-fill, .enc-lock')));
+        encLoop();
+      }, 5600);
     })();
   </script>
 
