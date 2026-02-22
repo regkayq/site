@@ -1,5 +1,5 @@
 # Base configs
-baseurl: "https://regkayq.github.io/site/"
+baseurl: "https://regkayq.github.io/evida/"
 image_fulls_loc: "/images/fulls"
 image_thumbs_loc: "/images/thumbs"
 google_analytics: ""
