@@ -2804,6 +2804,7 @@
     document.querySelectorAll('.nav-item[data-page]').forEach(item => {
       item.addEventListener('click', e => {
         e.preventDefault();
+        userTookControl = true;
         activatePanel(item.dataset.page);
       });
     });
@@ -2903,8 +2904,9 @@
       { tab: 'tab-cases',   label: 'Latest Cases'  },
     ];
 
-    let navIdx  = 0;
-    let paused  = false;
+    let navIdx          = 0;
+    let paused          = false;
+    let userTookControl = false;
 
     // Hide cursor offscreen initially
     moveCursor(-100, -100);
@@ -2958,6 +2960,10 @@
       await wait(1200); // initial pause before first move
 
       while (true) {
+        if (userTookControl) {
+          cursor.style.display = 'none';
+          return;
+        }
         if (paused) { await wait(400); continue; }
 
         const page = navSequence[navIdx];
@@ -2967,7 +2973,7 @@
           // pause on dashboard, then animate tabs
           await wait(1800);
           for (const t of tabSequence) {
-            if (paused) break;
+            if (paused || userTookControl) break;
             await clickTabBtn(t.tab);
             await wait(2000);
           }
