@@ -617,12 +617,10 @@
         <div class="badge-area"></div>
         <div class="plan-name">Field</div>
         <div class="plan-price">
-          <span class="price-currency">&euro;</span>
-          <span class="price-amount" data-monthly="4" data-annual="3">4</span>
-          <span class="price-period">/ month</span>
+          <span class="price-amount" data-monthly="Free" data-annual="Free" style="font-size:3rem;">Free</span>
         </div>
         <p class="plan-tagline">For individual investigators and journalists getting started with digital evidence management.</p>
-        <a class="plan-cta outline" href="onboarding.html">Get Started &rarr;</a>
+        <a class="plan-cta outline" href="onboarding.html">Get Started Free &rarr;</a>
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li>
@@ -855,6 +853,9 @@
           el.textContent = annual ? el.dataset.annual : el.dataset.monthly;
         });
         periods.forEach(function (el) {
+          var card = el.closest('.pricing-card');
+          var amt = card && card.querySelector('.price-amount');
+          if (amt && (amt.dataset.monthly === 'Free')) return;
           el.textContent = annual ? '/ mo, billed annually' : '/ month';
         });
       }
