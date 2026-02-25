@@ -1151,11 +1151,382 @@
       margin-top: 0.25rem;
     }
 
+    /* ── SETTINGS PANEL ────────────────────────── */
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .settings-sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+    }
+
+    .settings-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .settings-nav-item:hover { background: rgba(109,40,217,0.1); color: var(--white); }
+
+    .settings-nav-item.active {
+      background: rgba(109,40,217,0.18);
+      color: var(--purple-pale);
+      font-weight: 600;
+    }
+
+    .settings-nav-item svg { flex-shrink: 0; opacity: 0.7; }
+    .settings-nav-item.active svg { opacity: 1; }
+
+    .settings-nav-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0.4rem 0.75rem;
+    }
+
+    .settings-content { display: flex; flex-direction: column; gap: 1rem; }
+
+    .settings-section { display: none; }
+    .settings-section.active { display: flex; flex-direction: column; gap: 1rem; }
+
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .settings-card-header {
+      padding: 1rem 1.25rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .settings-card-header svg { opacity: 0.8; color: var(--purple-light); }
+
+    .settings-card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .settings-card-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .settings-card-body {
+      padding: 0.25rem 0;
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+      gap: 1rem;
+    }
+
+    .settings-row:last-child { border-bottom: none; }
+
+    .settings-row-info { flex: 1; }
+
+    .settings-row-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .settings-row-sublabel {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      line-height: 1.4;
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 38px;
+      height: 21px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.2);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-track {
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+    }
+
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(17px);
+    }
+
+    /* Select */
+    .settings-select {
+      appearance: none;
+      background: rgba(124,58,237,0.08);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.42rem 2rem 0.42rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .settings-select:focus { border-color: var(--purple-mid); }
+
+    /* Input field */
+    .settings-input {
+      background: rgba(124,58,237,0.06);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.78rem;
+      color: var(--white);
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s;
+    }
+
+    .settings-input::placeholder { color: rgba(148,163,184,0.5); }
+    .settings-input:focus { border-color: var(--purple-mid); }
+
+    .settings-input-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .settings-input-group .settings-input { flex: 1; }
+
+    /* RAG mode selector cards */
+    .rag-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.65rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .rag-mode-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 0.8rem;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      position: relative;
+    }
+
+    .rag-mode-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(109,40,217,0.06);
+    }
+
+    .rag-mode-card.selected {
+      border-color: var(--purple-mid);
+      background: rgba(109,40,217,0.12);
+    }
+
+    .rag-mode-card.selected::after {
+      content: '';
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--purple-mid);
+      box-shadow: 0 0 6px var(--purple-mid);
+    }
+
+    .rag-mode-icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rag-mode-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .rag-mode-desc {
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Self-hosted config area */
+    .rag-config-block {
+      padding: 0 1.25rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .rag-config-block.hidden { display: none; }
+
+    .rag-config-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.1rem;
+    }
+
+    .rag-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .rag-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .rag-status-connected { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .rag-status-disconnected { background: rgba(148,163,184,0.1); color: #94a3b8; }
+    .rag-status-error { background: rgba(239,68,68,0.12); color: #f87171; }
+
+    /* Btn */
+    .settings-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: rgba(124,58,237,0.1);
+      color: var(--purple-pale);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .settings-btn:hover { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); }
+
+    .settings-btn-primary {
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .settings-btn-primary:hover { opacity: 0.9; }
+
+    .settings-btn-danger {
+      background: rgba(239,68,68,0.08);
+      border-color: rgba(239,68,68,0.25);
+      color: #f87171;
+    }
+
+    .settings-btn-danger:hover { background: rgba(239,68,68,0.15); }
+
+    .settings-footer-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border);
+      gap: 0.5rem;
+    }
+
+    .settings-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(109,40,217,0.2);
+      color: var(--purple-pale);
+    }
+
+    .profile-avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .profile-avatar-lg {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-meta { flex: 1; }
+    .profile-avatar-name { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+    .profile-avatar-role { font-size: 0.73rem; color: var(--muted); margin-top: 0.1rem; }
+
     /* ── RESPONSIVE ────────────────────────────── */
     @media (max-width: 900px) {
       :root { --sidebar-w: 0px; }
       .sidebar { display: none; }
       .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .settings-layout { grid-template-columns: 1fr; }
+      .settings-sidebar { position: static; }
+      .rag-mode-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -1236,7 +1607,7 @@
 
       <span class="nav-section-label">System</span>
 
-      <a class="nav-item" href="#">
+      <a class="nav-item" href="#" data-page="settings">
         <!-- settings icon -->
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
@@ -1779,6 +2150,636 @@
       </div>
     </div><!-- /panel: case-reports -->
 
+    <!-- ── SETTINGS PANEL ────────────────────────── -->
+    <div class="page-content page-panel" data-panel="settings">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Settings</div>
+          <div class="panel-subtitle">Manage your account, privacy, and integrations</div>
+        </div>
+        <button class="panel-action-btn">Save Changes</button>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- Left nav -->
+        <div class="settings-sidebar">
+          <div class="settings-nav-item active" data-settings-tab="profile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </div>
+          <div class="settings-nav-item" data-settings-tab="privacy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Privacy
+          </div>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-item" data-settings-tab="rag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            RAG Integration
+          </div>
+          <div class="settings-nav-item" data-settings-tab="self-hosted">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            Self-Hosted RAG
+          </div>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-item" data-settings-tab="notifications">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notifications
+          </div>
+          <div class="settings-nav-item" data-settings-tab="security">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Security
+          </div>
+        </div>
+
+        <!-- Right content -->
+        <div class="settings-content">
+
+          <!-- ── PROFILE ── -->
+          <div class="settings-section active" data-settings-section="profile">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <div>
+                  <div class="settings-card-title">Account Profile</div>
+                  <div class="settings-card-desc">Your identity and role within EVIDA</div>
+                </div>
+              </div>
+              <div class="profile-avatar-row">
+                <div class="profile-avatar-lg">AR</div>
+                <div class="profile-avatar-meta">
+                  <div class="profile-avatar-name">Alex Rodriguez</div>
+                  <div class="profile-avatar-role">Senior Investigator &bull; Human Rights Watch</div>
+                </div>
+                <button class="settings-btn">Change Photo</button>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Full Name</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="Alex Rodriguez" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Email Address</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="a.rodriguez@hrw.org" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Role</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>Senior Investigator</option>
+                    <option>Investigator</option>
+                    <option>Analyst</option>
+                    <option>Administrator</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Organization</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="Human Rights Watch" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Language</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>English</option>
+                    <option>French</option>
+                    <option>Arabic</option>
+                    <option>Spanish</option>
+                    <option>Ukrainian</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-footer-row">
+                <button class="settings-btn">Cancel</button>
+                <button class="settings-btn settings-btn-primary">Save Profile</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── PRIVACY ── -->
+          <div class="settings-section" data-settings-section="privacy">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div>
+                  <div class="settings-card-title">Data Privacy</div>
+                  <div class="settings-card-desc">Control how your data and case information is handled</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Anonymise witness identifiers in exports</div>
+                    <div class="settings-row-sublabel">Replace real names and IDs with codenames in all downloaded reports and exports</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Strip metadata from uploaded media</div>
+                    <div class="settings-row-sublabel">Automatically remove EXIF data (GPS, device info) from photos and videos on ingest</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">End-to-end encrypt case notes</div>
+                    <div class="settings-row-sublabel">Notes are encrypted client-side before being stored. Only you and authorised team members can read them</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Allow AI to reference witness data</div>
+                    <div class="settings-row-sublabel">Permit the AI analysis engine to cross-reference witness records when generating insights</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Usage analytics</div>
+                    <div class="settings-row-sublabel">Send anonymous product analytics to help improve EVIDA. No case data is ever included</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                <div>
+                  <div class="settings-card-title">Data Retention</div>
+                  <div class="settings-card-desc">Set how long data is kept before automatic purging</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Archive closed cases after</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>30 days</option>
+                    <option>90 days</option>
+                    <option selected>180 days</option>
+                    <option>1 year</option>
+                    <option>Never</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Session log retention</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>7 days</option>
+                    <option selected>30 days</option>
+                    <option>90 days</option>
+                    <option>1 year</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Request data export</div>
+                    <div class="settings-row-sublabel">Download a complete archive of your account data</div>
+                  </div>
+                  <button class="settings-btn">Export Data</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Delete account</div>
+                    <div class="settings-row-sublabel">Permanently remove your account and all associated data</div>
+                  </div>
+                  <button class="settings-btn settings-btn-danger">Delete Account</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── RAG INTEGRATION ── -->
+          <div class="settings-section" data-settings-section="rag">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                <div>
+                  <div class="settings-card-title">RAG Knowledge Source</div>
+                  <div class="settings-card-desc">Choose where the AI retrieves contextual knowledge when analysing your cases</div>
+                </div>
+              </div>
+              <div class="rag-mode-grid">
+                <div class="rag-mode-card selected" data-rag-mode="evida-cloud">
+                  <div class="rag-mode-icon">☁️</div>
+                  <div class="rag-mode-title">EVIDA Cloud RAG</div>
+                  <div class="rag-mode-desc">Managed knowledge base hosted by EVIDA. Zero setup, always up to date.</div>
+                </div>
+                <div class="rag-mode-card" data-rag-mode="external">
+                  <div class="rag-mode-icon">🔗</div>
+                  <div class="rag-mode-title">External RAG API</div>
+                  <div class="rag-mode-desc">Connect to Pinecone, Weaviate, Qdrant, or any OpenAI-compatible vector store.</div>
+                </div>
+                <div class="rag-mode-card" data-rag-mode="self-hosted">
+                  <div class="rag-mode-icon">🖥️</div>
+                  <div class="rag-mode-title">Self-Hosted RAG</div>
+                  <div class="rag-mode-desc">Point to your own privately hosted RAG system — full data sovereignty.</div>
+                </div>
+              </div>
+
+              <!-- EVIDA Cloud config (default visible) -->
+              <div class="rag-config-block" id="rag-config-evida-cloud">
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Status</div>
+                    <div class="settings-row-sublabel">EVIDA Cloud RAG is active and indexing your cases in real time</div>
+                  </div>
+                  <span class="rag-status-pill rag-status-connected"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block"></span>Connected</span>
+                </div>
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Index size</div>
+                  </div>
+                  <span style="font-size:0.78rem;color:var(--purple-pale);font-weight:600">4,217 documents</span>
+                </div>
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Re-index all cases</div>
+                    <div class="settings-row-sublabel">Force a full re-embedding of all evidence and case notes</div>
+                  </div>
+                  <button class="settings-btn">Re-index Now</button>
+                </div>
+              </div>
+
+              <!-- External RAG config -->
+              <div class="rag-config-block hidden" id="rag-config-external">
+                <div class="rag-config-label">External RAG Provider</div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Provider</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Pinecone</option>
+                    <option>Weaviate</option>
+                    <option>Qdrant</option>
+                    <option>Chroma</option>
+                    <option>OpenAI-compatible endpoint</option>
+                  </select>
+                </div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">API Key</div>
+                  <input class="settings-input" type="password" placeholder="sk-••••••••••••••••" />
+                </div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Index / Collection Name</div>
+                  <input class="settings-input" placeholder="evida-evidence-index" />
+                </div>
+                <div class="settings-input-group">
+                  <button class="settings-btn settings-btn-primary">Test Connection</button>
+                  <span class="rag-status-pill rag-status-disconnected">Not connected</span>
+                </div>
+              </div>
+
+              <div class="settings-footer-row">
+                <button class="settings-btn">Reset to Default</button>
+                <button class="settings-btn settings-btn-primary">Apply</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div>
+                  <div class="settings-card-title">Retrieval Behaviour</div>
+                  <div class="settings-card-desc">Tune how the AI searches and ranks knowledge</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Top-K results</div>
+                    <div class="settings-row-sublabel">How many documents to retrieve per query</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>3</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Similarity threshold</div>
+                    <div class="settings-row-sublabel">Minimum relevance score for a document to be included</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>0.5 — Broad</option>
+                    <option selected>0.7 — Balanced</option>
+                    <option>0.85 — Strict</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Include witness transcripts</div>
+                    <div class="settings-row-sublabel">Allow witness testimony text to be retrieved as context</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Include AI-generated summaries</div>
+                    <div class="settings-row-sublabel">Use prior AI insight summaries as retrievable context</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SELF-HOSTED RAG ── -->
+          <div class="settings-section" data-settings-section="self-hosted">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                <div>
+                  <div class="settings-card-title">Self-Hosted RAG System</div>
+                  <div class="settings-card-desc">Connect EVIDA to your own privately operated retrieval infrastructure</div>
+                </div>
+                <span class="settings-badge" style="margin-left:auto">Advanced</span>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Enable self-hosted RAG</div>
+                    <div class="settings-row-sublabel">Override all cloud RAG settings and route all retrieval queries to your server</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="selfhosted-toggle" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="rag-config-block" id="self-hosted-config">
+                <div class="rag-config-label">Server Configuration</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Endpoint URL</div>
+                  <input class="settings-input" placeholder="https://rag.your-domain.org/v1/query" />
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">API Key / Bearer Token</div>
+                  <div class="settings-input-group">
+                    <input class="settings-input" type="password" placeholder="Your private API key" />
+                    <button class="settings-btn">Show</button>
+                  </div>
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Authentication method</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Bearer Token</option>
+                    <option>API Key Header</option>
+                    <option>Basic Auth</option>
+                    <option>mTLS Certificate</option>
+                    <option>None (internal network)</option>
+                  </select>
+                </div>
+
+                <div class="rag-config-label" style="margin-top:0.4rem">Network &amp; TLS</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Request timeout (ms)</div>
+                  <input class="settings-input" placeholder="5000" style="max-width:160px" />
+                </div>
+
+                <div class="settings-row" style="padding:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Verify TLS certificate</div>
+                    <div class="settings-row-sublabel">Disable only for internal/self-signed certs on isolated networks</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+
+                <div class="rag-config-label" style="margin-top:0.4rem">Index Mapping</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Collection / namespace</div>
+                  <input class="settings-input" placeholder="evida-cases" />
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Embedding model (optional override)</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Use server default</option>
+                    <option>text-embedding-3-small</option>
+                    <option>text-embedding-3-large</option>
+                    <option>nomic-embed-text</option>
+                    <option>bge-m3</option>
+                    <option>Custom</option>
+                  </select>
+                </div>
+
+                <div class="settings-input-group" style="margin-top:0.25rem">
+                  <button class="settings-btn settings-btn-primary">Test Connection</button>
+                  <span class="rag-status-pill rag-status-disconnected" id="selfhosted-status">Not connected</span>
+                </div>
+              </div>
+
+              <div class="settings-footer-row">
+                <button class="settings-btn">Discard</button>
+                <button class="settings-btn settings-btn-primary">Save &amp; Connect</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <div>
+                  <div class="settings-card-title">Connection Health</div>
+                  <div class="settings-card-desc">Live diagnostics for your self-hosted RAG endpoint</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Endpoint reachable</div></div>
+                  <span class="rag-status-pill rag-status-disconnected">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Auth valid</div></div>
+                  <span class="rag-status-pill rag-status-disconnected">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Avg. query latency</div></div>
+                  <span style="font-size:0.78rem;color:var(--muted)">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Last successful query</div></div>
+                  <span style="font-size:0.78rem;color:var(--muted)">Never</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Run diagnostics</div>
+                    <div class="settings-row-sublabel">Send a test query and inspect the raw response</div>
+                  </div>
+                  <button class="settings-btn">Run Test</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── NOTIFICATIONS ── -->
+          <div class="settings-section" data-settings-section="notifications">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <div>
+                  <div class="settings-card-title">Notification Preferences</div>
+                  <div class="settings-card-desc">Choose what you're alerted to and how</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">New AI insight generated</div>
+                    <div class="settings-row-sublabel">Alert when EVIDA AI produces a new cross-case insight</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Evidence upload complete</div>
+                    <div class="settings-row-sublabel">Notify when a batch upload finishes processing</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Witness status change</div>
+                    <div class="settings-row-sublabel">Alert when a witness protection level is updated</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Case review deadline approaching</div>
+                    <div class="settings-row-sublabel">Reminder 48 hours before a review deadline</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Mobile push notifications</div>
+                    <div class="settings-row-sublabel">Receive alerts on the EVIDA Mobile app</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Email digest</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>Off</option>
+                    <option selected>Daily</option>
+                    <option>Weekly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SECURITY ── -->
+          <div class="settings-section" data-settings-section="security">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <div>
+                  <div class="settings-card-title">Security &amp; Access</div>
+                  <div class="settings-card-desc">Protect your account and active sessions</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Two-factor authentication</div>
+                    <div class="settings-row-sublabel">Require a TOTP code in addition to your password on each login</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Passkey login</div>
+                    <div class="settings-row-sublabel">Use a device biometric or hardware key instead of password</div>
+                  </div>
+                  <button class="settings-btn">Set Up Passkey</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Session auto-lock</div>
+                    <div class="settings-row-sublabel">Lock the dashboard automatically after a period of inactivity</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>5 minutes</option>
+                    <option selected>15 minutes</option>
+                    <option>30 minutes</option>
+                    <option>1 hour</option>
+                    <option>Never</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Login activity alerts</div>
+                    <div class="settings-row-sublabel">Send an email when a new device logs into your account</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Change password</div>
+                  </div>
+                  <button class="settings-btn">Change Password</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Revoke all sessions</div>
+                    <div class="settings-row-sublabel">Sign out all devices immediately — you will also be logged out</div>
+                  </div>
+                  <button class="settings-btn settings-btn-danger">Revoke All</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /settings-content -->
+      </div><!-- /settings-layout -->
+    </div><!-- /panel: settings -->
+
   </div><!-- /main -->
 
   <!-- Demo cursor -->
@@ -1836,6 +2837,30 @@
         });
       }
     }
+
+    /* ── Settings tab navigation ───────────────── */
+    document.querySelectorAll('.settings-nav-item[data-settings-tab]').forEach(item => {
+      item.addEventListener('click', () => {
+        const tab = item.dataset.settingsTab;
+        document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+        const section = document.querySelector(`.settings-section[data-settings-section="${tab}"]`);
+        if (section) section.classList.add('active');
+      });
+    });
+
+    /* ── RAG mode card selection ────────────────── */
+    document.querySelectorAll('.rag-mode-card[data-rag-mode]').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.rag-mode-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        // Hide all rag config blocks
+        document.querySelectorAll('[id^="rag-config-"]').forEach(el => el.classList.add('hidden'));
+        const configEl = document.getElementById('rag-config-' + card.dataset.ragMode);
+        if (configEl) configEl.classList.remove('hidden');
+      });
+    });
 
     /* ── Demo cursor animation ──────────────────── */
     const cursor = document.getElementById('demo-cursor');
