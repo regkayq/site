@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works — EVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.cdnfonts.com/css/oughter" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080812;
+      --bg-2:        #0e0e1e;
+      --bg-card:     #12122a;
+      --purple-deep: #3b0f6e;
+      --purple:      #6d28d9;
+      --purple-mid:  #7c3aed;
+      --purple-light:#a78bfa;
+      --purple-pale: #c4b5fd;
+      --accent:      #9333ea;
+      --white:       #f5f3ff;
+      --muted:       #94a3b8;
+      --border:      rgba(124,58,237,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      background: rgba(8, 8, 18, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Oughter', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--white); }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.52rem 1.2rem;
+      background: var(--purple-mid);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-nav:hover { background: var(--accent); transform: translateY(-1px); }
+
+    /* ── PAGE HERO ───────────────────────────────── */
+    .page-hero {
+      position: relative;
+      padding: 160px 5% 90px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 550px;
+      background: radial-gradient(ellipse at center, rgba(109,40,217,0.3) 0%, rgba(109,40,217,0.04) 55%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.07;
+      letter-spacing: -0.04em;
+      max-width: 800px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero h1 .gradient {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 30%, #7c3aed 70%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-hero p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.75;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SHARED SECTION ──────────────────────────── */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-full {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-heading {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      max-width: 680px;
+      margin-bottom: 1rem;
+    }
+
+    .section-heading .gradient {
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── AI PROCESSING SECTION ──────────────────── */
+    .processing-section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .processing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+      margin-top: 1rem;
+    }
+
+    .processing-text h2 {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .processing-text h2 .gradient {
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .processing-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .processing-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      padding: 1.4rem 1.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .processing-stat .stat-num {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .processing-stat .stat-label {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Processing UI card */
+    .proc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    .proc-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .proc-card-header .dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .proc-card-header .dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .proc-card-header .title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .proc-file-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+    }
+
+    .proc-file-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .proc-file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .proc-file-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .proc-bar-track {
+      height: 5px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .proc-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--purple-pale));
+      width: 0%;
+      animation: fillBar 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes fillBar {
+      0%   { width: 0%; }
+      60%  { width: 85%; }
+      100% { width: 100%; }
+    }
+
+    .proc-file-status {
+      font-size: 0.68rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .proc-file-status.done   { color: #6ee7b7; }
+    .proc-file-status.active { color: var(--purple-pale); }
+    .proc-file-status.queued { color: var(--muted); }
+
+    .proc-tags-row {
+      padding: 1rem 1.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+    }
+
+    .proc-tag {
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      background: rgba(109,40,217,0.14);
+      border: 1px solid rgba(124,58,237,0.25);
+      color: var(--purple-pale);
+      animation: fadeInTag 0.3s ease both;
+    }
+
+    @keyframes fadeInTag {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .proc-frames-row {
+      padding: 1rem 1.3rem;
+      display: flex;
+      gap: 0.5rem;
+      overflow: hidden;
+    }
+
+    .proc-frame {
+      flex-shrink: 0;
+      width: 52px;
+      height: 38px;
+      border-radius: 5px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      animation: fadeInTag 0.4s ease both;
+    }
+
+    .proc-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.3rem;
+      background: rgba(16,185,129,0.05);
+      border-top: 1px solid rgba(16,185,129,0.15);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6ee7b7;
+    }
+
+    .proc-summary .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16,185,129,0.7);
+      animation: pulse 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* type-specific extraction panels */
+    .extract-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 3.5rem;
+    }
+
+    .extract-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.6rem;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .extract-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(109,40,217,0.16);
+    }
+
+    .extract-card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .extract-icon {
+      font-size: 1.4rem;
+    }
+
+    .extract-type {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .extract-outputs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .extract-output {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .extract-output::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      flex-shrink: 0;
+    }
+
+    /* ── TWO TOOLS GRID ──────────────────────────── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.6rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple-mid), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tool-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 64px rgba(109,40,217,0.18);
+    }
+
+    .tool-card:hover::before { opacity: 1; }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.28rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(109,40,217,0.12);
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      margin-bottom: 1.6rem;
+    }
+
+    .tool-icon {
+      font-size: 2.4rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .tool-card h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.85rem;
+    }
+
+    .tool-card p {
+      font-size: 0.91rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.8rem;
+    }
+
+    .tool-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .tool-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tool-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      flex-shrink: 0;
+      margin-top: 0.46rem;
+    }
+
+    .connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      gap: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .connector-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 140px;
+    }
+
+    .connector-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.4rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    /* ── ENCRYPTION ANIMATION ────────────────────── */
+    .encryption-section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 5%;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .encryption-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .encryption-text .section-heading {
+      margin-bottom: 1.2rem;
+    }
+
+    .encryption-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .encryption-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .enc-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .enc-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--purple-pale);
+      flex-shrink: 0;
+      width: 72px;
+    }
+
+    .enc-bar-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .enc-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--purple-pale));
+      width: 0%;
+      animation: encFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes encFill {
+      0%   { width: 0%; opacity: 0.6; }
+      80%  { width: 95%; opacity: 1; }
+      100% { width: 100%; opacity: 1; }
+    }
+
+    .enc-lock {
+      font-size: 1rem;
+      flex-shrink: 0;
+      opacity: 0;
+      animation: lockAppear 0.3s ease forwards;
+    }
+
+    @keyframes lockAppear {
+      to { opacity: 1; }
+    }
+
+    .enc-status {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 0.6rem;
+      padding: 0.8rem 1.1rem;
+      background: rgba(16,185,129,0.07);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6ee7b7;
+    }
+
+    .enc-status .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16,185,129,0.6);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* ── AI CAPABILITIES ─────────────────────────── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .ai-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .ai-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(109,40,217,0.06), transparent);
+      pointer-events: none;
+    }
+
+    .ai-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(109,40,217,0.18);
+    }
+
+    .ai-card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.3rem;
+      background: rgba(109,40,217,0.12);
+      border: 1px solid rgba(109,40,217,0.2);
+    }
+
+    .ai-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .ai-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .chip {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 0.2rem 0.7rem;
+      background: rgba(109,40,217,0.1);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+    }
+
+    /* ── CTA ─────────────────────────────────────── */
+    .cta-section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 5%;
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 3rem;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid rgba(109,40,217,0.35);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(109,40,217,0.18);
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(109,40,217,0.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-box h2 {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-box p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      color: #fff;
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 32px rgba(109,40,217,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 48px rgba(109,40,217,0.65);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      background: transparent;
+      color: var(--purple-pale);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(124,58,237,0.1);
+      border-color: var(--purple-mid);
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2.5rem 5%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(148,163,184,0.45);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .encryption-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .processing-grid { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ───────────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="index.html">EVIDA</a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="how-it-works.html" class="active">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a class="btn-nav" href="onboarding.html">Get Started &rarr;</a>
+  </nav>
+
+  <!-- ── PAGE HERO ────────────────────────────────── -->
+  <section class="page-hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      From Field to Courtroom
+    </div>
+    <h1>
+      Evidence captured.<br/>
+      <span class="gradient">Cases built. Justice pursued.</span>
+    </h1>
+    <p>
+      EVIDA is a two-part system — a hardened mobile app for field collection and a
+      powerful desktop platform for analysis — connected by end-to-end encryption
+      and guided at every step by AI.
+    </p>
+  </section>
+
+  <!-- ── AI PROCESSING ────────────────────────────── -->
+  <section class="processing-section">
+    <div class="section-tag">AI Processing</div>
+
+    <div class="processing-grid">
+
+      <div class="processing-text">
+        <h2>
+          Upload once.<br/>
+          <span class="gradient">AI does the rest.</span>
+        </h2>
+        <p>
+          The moment files land in EVIDA, the AI engine goes to work. Every piece
+          of evidence — hours of raw video, field recordings, photos, documents —
+          is automatically analysed, indexed, and made fully searchable.
+        </p>
+        <p>
+          Six hours of unreviewed footage becomes thousands of individually tagged,
+          timestamped frames. A two-hour testimony recording becomes a searchable,
+          speaker-attributed transcript. No manual tagging. No manual review to start.
+        </p>
+
+        <div class="processing-stat">
+          <span class="stat-num">6 hrs</span>
+          <span class="stat-label">of raw footage → <strong style="color: var(--white);">12,000+</strong> searchable frames<br/>extracted, tagged &amp; indexed automatically</span>
+        </div>
+      </div>
+
+      <!-- Live processing UI mockup -->
+      <div class="proc-card">
+        <div class="proc-card-header">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="title">EVIDA · Processing evidence batch</span>
+        </div>
+
+        <!-- video file -->
+        <div class="proc-file-row">
+          <span class="proc-file-icon">🎥</span>
+          <div class="proc-file-info">
+            <div class="proc-file-name">field-recording-2024-11-03.mp4 · 6h 14m</div>
+            <div class="proc-bar-track">
+              <div class="proc-bar-fill" style="animation-duration: 3s; animation-delay: 0s;"></div>
+            </div>
+          </div>
+          <span class="proc-file-status active">Processing…</span>
+        </div>
+
+        <!-- extracted frames -->
+        <div class="proc-frames-row">
+          <div class="proc-frame" style="animation-delay:0.1s">00:04</div>
+          <div class="proc-frame" style="animation-delay:0.2s">01:12</div>
+          <div class="proc-frame" style="animation-delay:0.3s">03:47</div>
+          <div class="proc-frame" style="animation-delay:0.4s">07:21</div>
+          <div class="proc-frame" style="animation-delay:0.5s">11:08</div>
+          <div class="proc-frame" style="animation-delay:0.6s">+12k</div>
+        </div>
+
+        <!-- auto tags -->
+        <div class="proc-tags-row">
+          <span class="proc-tag" style="animation-delay:0.1s">📍 Aleppo, Syria</span>
+          <span class="proc-tag" style="animation-delay:0.2s">👤 3 individuals</span>
+          <span class="proc-tag" style="animation-delay:0.3s">🏚 Destroyed structure</span>
+          <span class="proc-tag" style="animation-delay:0.4s">🔫 Armed presence</span>
+          <span class="proc-tag" style="animation-delay:0.5s">☁️ Smoke plume</span>
+          <span class="proc-tag" style="animation-delay:0.6s">🕐 14:32 UTC</span>
+        </div>
+
+        <!-- audio testimony -->
+        <div class="proc-file-row">
+          <span class="proc-file-icon">🎙</span>
+          <div class="proc-file-info">
+            <div class="proc-file-name">witness-testimony-A.m4a · 1h 47m</div>
+            <div class="proc-bar-track">
+              <div class="proc-bar-fill" style="animation-duration: 2.2s; animation-delay: 0.5s;"></div>
+            </div>
+          </div>
+          <span class="proc-file-status active">Processing…</span>
+        </div>
+
+        <!-- docs -->
+        <div class="proc-file-row">
+          <span class="proc-file-icon">📄</span>
+          <div class="proc-file-info">
+            <div class="proc-file-name">incident-report-batch-07.pdf · 84 pages</div>
+            <div class="proc-bar-track">
+              <div class="proc-bar-fill" style="animation-duration: 1.6s; animation-delay: 1s;"></div>
+            </div>
+          </div>
+          <span class="proc-file-status active">Processing…</span>
+        </div>
+
+        <div class="proc-summary">
+          <span class="dot"></span>
+          3 files · 12,847 frames extracted · 214 tags applied · Searchable now
+        </div>
+      </div>
+
+    </div>
+
+    <!-- What AI extracts per type -->
+    <div class="extract-grid">
+
+      <div class="extract-card">
+        <div class="extract-card-top">
+          <span class="extract-icon">🎥</span>
+          <span class="extract-type">Video footage</span>
+        </div>
+        <div class="extract-outputs">
+          <span class="extract-output">Scene-by-scene frame extraction with timestamps</span>
+          <span class="extract-output">Object, person &amp; location detection per frame</span>
+          <span class="extract-output">Audio track transcription &amp; speaker attribution</span>
+          <span class="extract-output">Automatic incident flagging &amp; highlight reel</span>
+        </div>
+      </div>
+
+      <div class="extract-card">
+        <div class="extract-card-top">
+          <span class="extract-icon">🎙</span>
+          <span class="extract-type">Audio recordings</span>
+        </div>
+        <div class="extract-outputs">
+          <span class="extract-output">Full verbatim transcript with timestamps</span>
+          <span class="extract-output">Speaker diarisation — who said what, when</span>
+          <span class="extract-output">Key statement extraction &amp; summary</span>
+          <span class="extract-output">Cross-reference against other testimonies</span>
+        </div>
+      </div>
+
+      <div class="extract-card">
+        <div class="extract-card-top">
+          <span class="extract-icon">📷</span>
+          <span class="extract-type">Photos &amp; images</span>
+        </div>
+        <div class="extract-outputs">
+          <span class="extract-output">Scene description &amp; object identification</span>
+          <span class="extract-output">Geolocation verification from visual cues</span>
+          <span class="extract-output">Metadata preservation &amp; integrity check</span>
+          <span class="extract-output">Reverse-image deduplication across cases</span>
+        </div>
+      </div>
+
+      <div class="extract-card">
+        <div class="extract-card-top">
+          <span class="extract-icon">📄</span>
+          <span class="extract-type">Documents &amp; reports</span>
+        </div>
+        <div class="extract-outputs">
+          <span class="extract-output">Full-text OCR extraction &amp; indexing</span>
+          <span class="extract-output">Named entity recognition (people, places, dates)</span>
+          <span class="extract-output">Automatic cross-link to related evidence</span>
+          <span class="extract-output">Structured summary &amp; key findings pull-out</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── TWO TOOLS ─────────────────────────────────── -->
+  <section class="section-full" style="background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="section-tag">The Platform</div>
+      <h2 class="section-heading">
+        Two tools. <span class="gradient">One seamless system.</span>
+      </h2>
+      <p class="section-sub">
+        EVIDA is built as a tightly integrated pair — each tool purpose-built for
+        its environment, designed to work together without friction.
+      </p>
+
+      <div class="tools-grid">
+
+        <div class="tool-card">
+          <span class="tool-badge">📱 Mobile App</span>
+          <span class="tool-icon">🌍</span>
+          <h3>Built for the Field</h3>
+          <p>
+            The EVIDA mobile app is designed for investigators operating in conflict zones
+            and high-pressure environments. It works without internet, protects data
+            on-device, and can be wiped instantly if the situation demands it.
+          </p>
+          <ul class="tool-list">
+            <li>Geo-tagged photos, video, and audio with full metadata preservation</li>
+            <li>Secure offline capture — syncs automatically when connectivity returns</li>
+            <li>Tamper-proof timestamping to establish chain of custody from first capture</li>
+            <li>One-tap emergency data wipe for high-risk situations</li>
+            <li>Witness testimony recording with encrypted transcription</li>
+            <li>Available on iOS and Android</li>
+          </ul>
+        </div>
+
+        <div class="tool-card">
+          <span class="tool-badge">🖥 Desktop Platform</span>
+          <span class="tool-icon">⚖️</span>
+          <h3>Built for the Case Room</h3>
+          <p>
+            The EVIDA desktop platform is where raw evidence becomes a credible case.
+            Import field captures, run AI analysis, collaborate with your team, and
+            generate structured case files ready for legal or international review.
+          </p>
+          <ul class="tool-list">
+            <li>Centralized evidence archive with advanced search, filtering, and tagging</li>
+            <li>AI-generated case files, incident summaries, and key findings reports</li>
+            <li>Automatic cross-referencing across incidents, locations, and timeframes</li>
+            <li>Structured exports formatted for ICC, UN bodies, and legal partners</li>
+            <li>Role-based team access with granular permission controls</li>
+            <li>Full cryptographic audit log of every action taken</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="connector">
+        <div class="connector-line"></div>
+        <div class="connector-badge">
+          🔄 &nbsp;End-to-end encrypted sync between mobile and desktop
+        </div>
+        <div class="connector-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ENCRYPTION ANIMATION ──────────────────────── -->
+  <div class="encryption-section">
+    <div class="encryption-inner">
+      <div class="encryption-text">
+        <div class="section-tag" style="margin-bottom: 1.4rem;">Security by Design</div>
+        <h2 class="section-heading">
+          Encrypted from the<br/>
+          <span class="gradient">first byte captured.</span>
+        </h2>
+        <p style="margin-top: 1.2rem;">
+          Evidence handled by EVIDA is encrypted on the device before it ever
+          leaves the field. Data is never stored in plaintext — not during capture,
+          not during transfer, not at rest. Only authorized users with the correct
+          cryptographic keys can access it.
+        </p>
+        <p style="margin-top: 1rem;">
+          Every action — upload, access, edit, export — is written to an immutable
+          audit log with a cryptographic signature, creating a tamper-proof chain
+          of custody that holds up in international courts.
+        </p>
+      </div>
+
+      <div class="encryption-visual">
+        <div class="enc-row">
+          <span class="enc-label">Video</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:0s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:1.6s;">🔐</span>
+        </div>
+        <div class="enc-row">
+          <span class="enc-label">Audio</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:0.3s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:1.9s;">🔐</span>
+        </div>
+        <div class="enc-row">
+          <span class="enc-label">Photos</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:0.6s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:2.2s;">🔐</span>
+        </div>
+        <div class="enc-row">
+          <span class="enc-label">Location</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:0.9s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:2.5s;">🔐</span>
+        </div>
+        <div class="enc-row">
+          <span class="enc-label">Metadata</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:1.2s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:2.8s;">🔐</span>
+        </div>
+        <div class="enc-row">
+          <span class="enc-label">Documents</span>
+          <div class="enc-bar-track">
+            <div class="enc-bar-fill" style="animation-duration:1.6s; animation-delay:1.5s;"></div>
+          </div>
+          <span class="enc-lock" style="animation-delay:3.1s;">🔐</span>
+        </div>
+        <div class="enc-status">
+          <span class="dot"></span>
+          All evidence encrypted on-device · Chain of custody active
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI CAPABILITIES ───────────────────────────── -->
+  <section class="section">
+    <div class="section-tag">AI Intelligence</div>
+    <h2 class="section-heading">
+      Beyond storage —
+      <span class="gradient"> AI that thinks with you.</span>
+    </h2>
+    <p class="section-sub">
+      EVIDA's AI doesn't just store evidence. It actively helps investigators
+      understand it, connect it, and communicate it with clarity and precision.
+    </p>
+    <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📂</div>
+        <h3>Automatic Case File Generation</h3>
+        <p>
+          EVIDA's AI structures your raw evidence — linking incidents, witness accounts,
+          timelines, and documents — into coherent, submission-ready case files with
+          minimal manual effort.
+        </p>
+        <span class="chip">Powered by AI</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">🔗</div>
+        <h3>Cross-Reference Engine</h3>
+        <p>
+          Surface hidden patterns across thousands of files. EVIDA automatically connects
+          related incidents, recurring perpetrators, geographic clusters, and corroborating
+          evidence — across cases and time.
+        </p>
+        <span class="chip">AI Cross-Reference</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-icon">📋</div>
+        <h3>Key Findings Summaries</h3>
+        <p>
+          Transform large volumes of raw evidence into concise, structured summaries.
+          EVIDA distills what matters most — turning weeks of analysis into actionable
+          insights in minutes.
+        </p>
+        <span class="chip">Instant Summaries</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Ready to see it in action?</h2>
+      <p>
+        Watch a live walkthrough of EVIDA from field capture to finished case file,
+        or get started and see how it fits your investigation workflow.
+      </p>
+      <div class="cta-actions">
+        <a class="btn-primary" href="onboarding.html">Get Started &rarr;</a>
+        <a class="btn-secondary" href="demo.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          Watch Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">EVIDA</span>
+    <ul class="footer-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <span class="footer-copy">&copy; 2025 EVIDA. All rights reserved.</span>
+  </footer>
+
+  <script>
+    function restartAnims(els) {
+      els.forEach(function(el) {
+        el.style.animation = 'none';
+        el.offsetWidth; // trigger reflow
+        el.style.animation = '';
+      });
+    }
+
+    // ── Processing bars + status labels ─────────────
+    var procRows = Array.from(document.querySelectorAll('.proc-file-row'));
+    var procStatusTimers = [];
+
+    function startProcCycle() {
+      procRows.forEach(function(row) {
+        var fill   = row.querySelector('.proc-bar-fill');
+        var status = row.querySelector('.proc-file-status');
+        if (!fill || !status) return;
+
+        var dur = parseFloat(fill.style.animationDuration || '2.4') * 1000;
+        var del = parseFloat(fill.style.animationDelay   || '0')   * 1000;
+
+        status.textContent = 'Processing…';
+        status.className   = 'proc-file-status active';
+
+        var t = setTimeout(function() {
+          status.textContent = '✓ Done';
+          status.className   = 'proc-file-status done';
+        }, dur + del);
+
+        procStatusTimers.push(t);
+      });
+    }
+
+    // Longest bar: 3s duration + 0s delay = 3s. 2.5s pause → loop every 5500ms
+    startProcCycle();
+    (function procLoop() {
+      setTimeout(function() {
+        procStatusTimers.forEach(clearTimeout);
+        procStatusTimers = [];
+        restartAnims(Array.from(document.querySelectorAll('.proc-bar-fill')));
+        startProcCycle();
+        procLoop();
+      }, 5500);
+    })();
+
+    // ── Encryption bars ──────────────────────────────
+    // Last bar: delay 1.5s + duration 1.6s = 3.1s. 2.5s pause → loop every 5600ms
+    (function encLoop() {
+      setTimeout(function() {
+        restartAnims(Array.from(document.querySelectorAll('.enc-bar-fill, .enc-lock')));
+        encLoop();
+      }, 5600);
+    })();
+  </script>
+
+</body>
+</html>

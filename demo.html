@@ -1,0 +1,2997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — EVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.cdnfonts.com/css/oughter" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080812;
+      --bg-2:        #0e0e1e;
+      --bg-card:     #12122a;
+      --bg-sidebar:  #0a0a18;
+      --purple-deep: #3b0f6e;
+      --purple:      #6d28d9;
+      --purple-mid:  #7c3aed;
+      --purple-light:#a78bfa;
+      --purple-pale: #c4b5fd;
+      --accent:      #9333ea;
+      --white:       #f5f3ff;
+      --muted:       #94a3b8;
+      --border:      rgba(124,58,237,0.25);
+      --sidebar-w:   228px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow: hidden;
+      line-height: 1.6;
+      display: flex;
+    }
+
+    /* ── NOISE ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    /* ── SIDEBAR ───────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 1.4rem 1.4rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      font-family: 'Oughter', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem 0.75rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.55rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+    }
+
+    .nav-item:hover { background: rgba(109,40,217,0.1); color: var(--white); }
+
+    .nav-item.active {
+      background: rgba(109,40,217,0.18);
+      color: var(--purple-pale);
+      font-weight: 600;
+    }
+
+    .nav-item svg { flex-shrink: 0; opacity: 0.75; }
+    .nav-item.active svg { opacity: 1; }
+
+    .nav-section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(148,163,184,0.35);
+      padding: 0.9rem 0.8rem 0.3rem;
+    }
+
+    /* ── SIDEBAR FOOTER ────────────────────────── */
+    .sidebar-footer {
+      flex-shrink: 0;
+      padding: 1rem 1rem 1.2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* storage block */
+    .storage-block {}
+
+    .storage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .storage-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .storage-pct {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+    }
+
+    .storage-bar {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(124,58,237,0.15);
+      overflow: hidden;
+      margin-bottom: 0.42rem;
+    }
+
+    .storage-fill {
+      height: 100%;
+      width: 32%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--accent));
+    }
+
+    .storage-detail {
+      font-size: 0.7rem;
+      color: rgba(148,163,184,0.5);
+    }
+
+    /* user profile */
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .user-role {
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    /* ── MAIN ──────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── TOP BAR ───────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+      background: rgba(8,8,18,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .greeting-block {}
+
+    .greeting-text {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+
+    .greeting-date {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.05rem;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    /* mobile connected pill */
+    .mobile-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #5eead4;
+      background: rgba(20,184,166,0.1);
+      border: 1px solid rgba(20,184,166,0.25);
+    }
+
+    .mobile-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #5eead4;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* notif bell */
+    .notif-btn {
+      position: relative;
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .notif-btn:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+
+    .notif-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg);
+    }
+
+    .topbar-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      border: 2px solid rgba(124,58,237,0.4);
+    }
+
+    /* ── PAGE CONTENT ──────────────────────────── */
+    .page-content {
+      padding: 1.8rem 2rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ── STATS ROW ─────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(124,58,237,0.45);
+      transform: translateY(-2px);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--purple-mid), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-card:hover::before { opacity: 1; }
+
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--purple-pale);
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: 0.7rem;
+      color: rgba(148,163,184,0.5);
+      margin-top: 0.3rem;
+    }
+
+    /* ── AI INSIGHT BANNER ─────────────────────── */
+    .ai-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.8rem 1.1rem;
+      background: linear-gradient(135deg, rgba(109,40,217,0.14), rgba(147,51,234,0.07));
+      border: 1px solid rgba(109,40,217,0.3);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: var(--purple-pale);
+    }
+
+    .ai-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--purple-light);
+      animation: pulse 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .ai-link {
+      margin-left: auto;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+
+    .ai-link:hover { color: var(--white); }
+
+    /* ── TABS ──────────────────────────────────── */
+    .tabs-header {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1rem;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover { color: var(--white); }
+
+    .tab-btn.active {
+      color: var(--purple-pale);
+      border-bottom-color: var(--purple-mid);
+    }
+
+    .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(109,40,217,0.25);
+      color: var(--purple-pale);
+    }
+
+    .tab-btn.active .tab-count {
+      background: var(--purple-mid);
+      color: #fff;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── PAGE PANELS ───────────────────────────── */
+    .page-panel {
+      display: none;
+      opacity: 0;
+    }
+    .page-panel.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ── PANEL HEADERS ─────────────────────────── */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .panel-subtitle {
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .panel-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.42rem 1rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .panel-action-btn:hover { opacity: 0.85; }
+
+    /* ── FILTER CHIPS ──────────────────────────── */
+    .filter-chips {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .filter-chip {
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .filter-chip.active,
+    .filter-chip:hover {
+      background: rgba(109,40,217,0.2);
+      color: var(--purple-pale);
+      border-color: rgba(124,58,237,0.4);
+    }
+
+    /* ── EVIDENCE GRID ─────────────────────────── */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 1100px) { .evidence-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .ev-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: border-color 0.2s;
+    }
+
+    .ev-card:hover { border-color: rgba(124,58,237,0.35); }
+
+    .ev-thumb {
+      width: 42px; height: 42px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .ev-info { flex: 1; min-width: 0; }
+
+    .ev-fname {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ev-meta {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .ev-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+
+    /* ── WITNESS LIST ──────────────────────────── */
+    .witness-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .witness-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .witness-row:hover { border-color: rgba(124,58,237,0.3); }
+
+    .witness-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(109,40,217,0.35), rgba(147,51,234,0.2));
+      border: 1px solid rgba(124,58,237,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      flex-shrink: 0;
+    }
+
+    .witness-info { flex: 1; }
+
+    .witness-id {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .witness-case {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.05rem;
+    }
+
+    .wstatus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .wstatus-interviewed { background: rgba(20,184,166,0.15); color: #5eead4; }
+    .wstatus-scheduled   { background: rgba(109,40,217,0.2);  color: #a78bfa; }
+    .wstatus-pending     { background: rgba(148,163,184,0.1); color: #94a3b8; }
+    .wstatus-protected   { background: rgba(234,179,8,0.12);  color: #fde047; }
+
+    /* ── AI ANALYSIS PANEL ─────────────────────── */
+    .ai-insights-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .ai-insight-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(109,40,217,0.25);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--accent));
+      opacity: 0.7;
+    }
+
+    .insight-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .insight-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.18);
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .insight-conf {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #5eead4;
+    }
+
+    .insight-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+
+    .insight-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .insight-cases {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+    }
+
+    .insight-case-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.15);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(124,58,237,0.2);
+    }
+
+    /* ── REPORTS LIST ──────────────────────────── */
+    .reports-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .report-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .report-row:hover { border-color: rgba(124,58,237,0.3); }
+
+    .report-icon {
+      width: 38px; height: 38px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      background: rgba(20,184,166,0.12);
+    }
+
+    .report-meta { flex: 1; }
+
+    .report-name {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .report-detail {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.08rem;
+    }
+
+    .report-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.18s;
+    }
+
+    .report-download:hover { background: rgba(109,40,217,0.22); }
+
+    /* ── DEMO CURSOR ───────────────────────────── */
+    #demo-cursor {
+      position: fixed;
+      width: 22px;
+      height: 26px;
+      pointer-events: none;
+      z-index: 9999;
+      transform-origin: 2px 2px;
+      transition: left 0.72s cubic-bezier(0.25, 1, 0.5, 1),
+                  top  0.72s cubic-bezier(0.25, 1, 0.5, 1);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    #demo-cursor.clicking {
+      animation: cursorClick 0.2s ease forwards;
+    }
+
+    @keyframes cursorClick {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(0.82); }
+      100% { transform: scale(1); }
+    }
+
+    .cursor-ripple {
+      position: fixed;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(124,58,237,0.7);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%) scale(0);
+      animation: rippleOut 0.5s ease forwards;
+    }
+
+    @keyframes rippleOut {
+      0%   { transform: translate(-50%, -50%) scale(0);   opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+    }
+
+    /* nav item hover highlight from cursor */
+    .nav-item.demo-hover {
+      background: rgba(109,40,217,0.1);
+      color: var(--white);
+    }
+
+    /* tab button hover from cursor */
+    .tab-btn.demo-hover {
+      color: var(--white);
+    }
+
+    /* ── CASES TABLE ───────────────────────────── */
+    .cases-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .cases-table th {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: rgba(148,163,184,0.45);
+      padding: 0.7rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(124,58,237,0.12);
+    }
+
+    .cases-table td {
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      border-bottom: 1px solid rgba(124,58,237,0.07);
+      vertical-align: middle;
+    }
+
+    .cases-table tr:last-child td { border-bottom: none; }
+
+    .cases-table tr:hover td {
+      background: rgba(109,40,217,0.05);
+    }
+
+    .case-icon-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .case-emoji {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .case-emoji.purple { background: rgba(109,40,217,0.2); }
+    .case-emoji.teal   { background: rgba(20,184,166,0.15); }
+    .case-emoji.rose   { background: rgba(225,29,72,0.15); }
+    .case-emoji.amber  { background: rgba(234,179,8,0.15); }
+
+    .case-name-cell .case-title {
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.12rem;
+    }
+
+    .case-name-cell .case-id {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .case-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-active   { background: rgba(109,40,217,0.2);  color: #a78bfa; }
+    .status-review   { background: rgba(234,179,8,0.15);  color: #fde047; }
+    .status-archived { background: rgba(20,184,166,0.15); color: #5eead4; }
+
+    .case-status .sdot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor;
+    }
+
+    .ev-count {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .ev-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .updated-text {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: background 0.18s, border-color 0.18s;
+    }
+
+    .action-btn:hover {
+      background: rgba(109,40,217,0.22);
+      border-color: rgba(124,58,237,0.45);
+    }
+
+    /* ── PENDING UPLOAD ────────────────────────── */
+    .upload-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0 0.8rem;
+    }
+
+    .upload-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .upload-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .upload-subtitle {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .upload-device {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #5eead4;
+      background: rgba(20,184,166,0.1);
+      border: 1px solid rgba(20,184,166,0.22);
+    }
+
+    .upload-device svg { flex-shrink: 0; }
+
+    .upload-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .upload-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .upload-row:hover { border-color: rgba(124,58,237,0.3); }
+
+    .file-icon {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .file-icon.photo    { background: rgba(109,40,217,0.18); }
+    .file-icon.video    { background: rgba(225,29,72,0.15); }
+    .file-icon.audio    { background: rgba(234,179,8,0.12); }
+    .file-icon.document { background: rgba(20,184,166,0.12); }
+
+    .file-meta { flex: 1; min-width: 0; }
+
+    .file-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-details {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .file-case {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--purple-pale);
+      white-space: nowrap;
+    }
+
+    /* upload status */
+    .upload-status { flex-shrink: 0; text-align: right; min-width: 120px; }
+
+    .ustatus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ustatus-pending  { background: rgba(148,163,184,0.1); color: #94a3b8; }
+    .ustatus-uploading{ background: rgba(109,40,217,0.2);  color: #a78bfa; }
+    .ustatus-queued   { background: rgba(234,179,8,0.1);   color: #fde047; }
+
+    /* progress bar for uploading */
+    .upload-progress {
+      margin-top: 0.45rem;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(124,58,237,0.15);
+      overflow: hidden;
+    }
+
+    .upload-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--purple-mid), var(--accent));
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+
+    .upload-progress-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 1.6s ease-in-out infinite;
+    }
+
+    .upload-pct {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--purple-pale);
+      margin-top: 0.25rem;
+    }
+
+    /* ── SETTINGS PANEL ────────────────────────── */
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .settings-sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+    }
+
+    .settings-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .settings-nav-item:hover { background: rgba(109,40,217,0.1); color: var(--white); }
+
+    .settings-nav-item.active {
+      background: rgba(109,40,217,0.18);
+      color: var(--purple-pale);
+      font-weight: 600;
+    }
+
+    .settings-nav-item svg { flex-shrink: 0; opacity: 0.7; }
+    .settings-nav-item.active svg { opacity: 1; }
+
+    .settings-nav-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0.4rem 0.75rem;
+    }
+
+    .settings-content { display: flex; flex-direction: column; gap: 1rem; }
+
+    .settings-section { display: none; }
+    .settings-section.active { display: flex; flex-direction: column; gap: 1rem; }
+
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .settings-card-header {
+      padding: 1rem 1.25rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .settings-card-header svg { opacity: 0.8; color: var(--purple-light); }
+
+    .settings-card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .settings-card-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .settings-card-body {
+      padding: 0.25rem 0;
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid rgba(124,58,237,0.1);
+      gap: 1rem;
+    }
+
+    .settings-row:last-child { border-bottom: none; }
+
+    .settings-row-info { flex: 1; }
+
+    .settings-row-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .settings-row-sublabel {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      line-height: 1.4;
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 38px;
+      height: 21px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.2);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-track {
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+    }
+
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(17px);
+    }
+
+    /* Select */
+    .settings-select {
+      appearance: none;
+      background: rgba(124,58,237,0.08);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.42rem 2rem 0.42rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .settings-select:focus { border-color: var(--purple-mid); }
+
+    /* Input field */
+    .settings-input {
+      background: rgba(124,58,237,0.06);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.78rem;
+      color: var(--white);
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.15s;
+    }
+
+    .settings-input::placeholder { color: rgba(148,163,184,0.5); }
+    .settings-input:focus { border-color: var(--purple-mid); }
+
+    .settings-input-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .settings-input-group .settings-input { flex: 1; }
+
+    /* RAG mode selector cards */
+    .rag-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.65rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .rag-mode-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 0.8rem;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      position: relative;
+    }
+
+    .rag-mode-card:hover {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(109,40,217,0.06);
+    }
+
+    .rag-mode-card.selected {
+      border-color: var(--purple-mid);
+      background: rgba(109,40,217,0.12);
+    }
+
+    .rag-mode-card.selected::after {
+      content: '';
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--purple-mid);
+      box-shadow: 0 0 6px var(--purple-mid);
+    }
+
+    .rag-mode-icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .rag-mode-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .rag-mode-desc {
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Self-hosted config area */
+    .rag-config-block {
+      padding: 0 1.25rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .rag-config-block.hidden { display: none; }
+
+    .rag-config-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.1rem;
+    }
+
+    .rag-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .rag-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .rag-status-connected { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .rag-status-disconnected { background: rgba(148,163,184,0.1); color: #94a3b8; }
+    .rag-status-error { background: rgba(239,68,68,0.12); color: #f87171; }
+
+    /* Btn */
+    .settings-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: rgba(124,58,237,0.1);
+      color: var(--purple-pale);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .settings-btn:hover { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); }
+
+    .settings-btn-primary {
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .settings-btn-primary:hover { opacity: 0.9; }
+
+    .settings-btn-danger {
+      background: rgba(239,68,68,0.08);
+      border-color: rgba(239,68,68,0.25);
+      color: #f87171;
+    }
+
+    .settings-btn-danger:hover { background: rgba(239,68,68,0.15); }
+
+    .settings-footer-row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border);
+      gap: 0.5rem;
+    }
+
+    .settings-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(109,40,217,0.2);
+      color: var(--purple-pale);
+    }
+
+    .profile-avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .profile-avatar-lg {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-mid), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-meta { flex: 1; }
+    .profile-avatar-name { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+    .profile-avatar-role { font-size: 0.73rem; color: var(--muted); margin-top: 0.1rem; }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .settings-layout { grid-template-columns: 1fr; }
+      .settings-sidebar { position: static; }
+      .rag-mode-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .page-content { padding: 1.2rem 1rem 3rem; }
+      .topbar { padding: 0 1rem; }
+      .mobile-pill span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SIDEBAR ─────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a class="sidebar-logo" href="index.html">EVIDA</a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Workspace</span>
+
+      <a class="nav-item active" href="#" data-page="dashboard">
+        <!-- grid icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+
+      <a class="nav-item" href="#" data-page="investigations">
+        <!-- folder icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        Investigations
+      </a>
+
+      <a class="nav-item" href="#" data-page="evidence">
+        <!-- archive icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/>
+          <line x1="10" y1="12" x2="14" y2="12"/>
+        </svg>
+        Evidence
+      </a>
+
+      <a class="nav-item" href="#" data-page="witnesses">
+        <!-- users icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Witnesses
+      </a>
+
+      <span class="nav-section-label">Intelligence</span>
+
+      <a class="nav-item" href="#" data-page="ai-analysis">
+        <!-- sparkle / AI icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        AI Analysis
+      </a>
+
+      <a class="nav-item" href="#" data-page="case-reports">
+        <!-- file-text icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Case Reports
+      </a>
+
+      <span class="nav-section-label">System</span>
+
+      <a class="nav-item" href="#" data-page="settings">
+        <!-- settings icon -->
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <!-- Storage -->
+      <div class="storage-block">
+        <div class="storage-header">
+          <span class="storage-label">Storage</span>
+          <span class="storage-pct">32%</span>
+        </div>
+        <div class="storage-bar">
+          <div class="storage-fill"></div>
+        </div>
+        <div class="storage-detail">9.4 GB remaining of 13.8 GB</div>
+      </div>
+
+      <!-- User -->
+      <div class="user-profile">
+        <div class="user-avatar">AR</div>
+        <div>
+          <div class="user-name">Alex Rodriguez</div>
+          <div class="user-role">Senior Investigator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ───────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="greeting-block">
+        <div class="greeting-text">Good evening, Alex.</div>
+        <div class="greeting-date">Thursday, 19 February 2026</div>
+      </div>
+      <div class="topbar-right">
+        <div class="mobile-pill">
+          <span class="dot"></span>
+          <span>EVIDA Mobile &bull; Connected</span>
+        </div>
+        <div class="notif-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-badge">3</span>
+        </div>
+        <div class="topbar-avatar">AR</div>
+      </div>
+    </header>
+
+    <!-- Page content panels -->
+    <div class="page-content page-panel active" data-panel="dashboard">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Active Cases</div>
+          <div class="stat-value">4</div>
+          <div class="stat-sub">2 updated today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Evidence Items</div>
+          <div class="stat-value">4,217</div>
+          <div class="stat-sub">+38 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">AI Insights</div>
+          <div class="stat-value">124</div>
+          <div class="stat-sub">6 new cross-refs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Upload</div>
+          <div class="stat-value">6</div>
+          <div class="stat-sub">1 uploading now</div>
+        </div>
+      </div>
+
+      <!-- AI banner -->
+      <div class="ai-banner">
+        <span class="ai-dot"></span>
+        EVIDA AI found <strong>6 new cross-references</strong> in Northern Syria Airstrike — INV-004 linking 3 additional witness accounts.
+        <a class="ai-link" href="#">View Insights &rarr;</a>
+      </div>
+
+      <!-- Tabs -->
+      <div>
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="tab-cases">
+            Latest Cases
+            <span class="tab-count">5</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-uploads">
+            Pending Upload
+            <span class="tab-count">6</span>
+          </button>
+        </div>
+
+        <!-- ── LATEST CASES ── -->
+        <div id="tab-cases" class="tab-panel active">
+          <table class="cases-table">
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Status</th>
+                <th>Evidence</th>
+                <th>Last Updated</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td>
+                  <div class="case-icon-cell">
+                    <div class="case-emoji purple">📁</div>
+                    <div class="case-name-cell">
+                      <div class="case-title">Northern Syria Airstrike</div>
+                      <div class="case-id">INV-004</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+                <td>
+                  <div class="ev-count">312</div>
+                  <div class="ev-label">items</div>
+                </td>
+                <td><span class="updated-text">2 hours ago</span></td>
+                <td><button class="action-btn">Open &rarr;</button></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="case-icon-cell">
+                    <div class="case-emoji purple">📁</div>
+                    <div class="case-name-cell">
+                      <div class="case-title">Zaporizhzhia Infrastructure Attack</div>
+                      <div class="case-id">INV-011</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+                <td>
+                  <div class="ev-count">201</div>
+                  <div class="ev-label">items</div>
+                </td>
+                <td><span class="updated-text">3 hours ago</span></td>
+                <td><button class="action-btn">Open &rarr;</button></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="case-icon-cell">
+                    <div class="case-emoji amber">📁</div>
+                    <div class="case-name-cell">
+                      <div class="case-title">Bucha Residential District</div>
+                      <div class="case-id">INV-007</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+                <td>
+                  <div class="ev-count">89</div>
+                  <div class="ev-label">items</div>
+                </td>
+                <td><span class="updated-text">6 hours ago</span></td>
+                <td><button class="action-btn">Open &rarr;</button></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="case-icon-cell">
+                    <div class="case-emoji teal">⚖️</div>
+                    <div class="case-name-cell">
+                      <div class="case-title">Detained Civilians — Kharkiv Region</div>
+                      <div class="case-id">INV-009</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="case-status status-review"><span class="sdot"></span>In Review</span></td>
+                <td>
+                  <div class="ev-count">184</div>
+                  <div class="ev-label">items</div>
+                </td>
+                <td><span class="updated-text">1 day ago</span></td>
+                <td><button class="action-btn">Open &rarr;</button></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="case-icon-cell">
+                    <div class="case-emoji rose">🗂️</div>
+                    <div class="case-name-cell">
+                      <div class="case-title">Mariupol Port District Survey</div>
+                      <div class="case-id">INV-002</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="case-status status-archived"><span class="sdot"></span>Archived</span></td>
+                <td>
+                  <div class="ev-count">97</div>
+                  <div class="ev-label">items</div>
+                </td>
+                <td><span class="updated-text">4 days ago</span></td>
+                <td><button class="action-btn">Open &rarr;</button></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ── PENDING UPLOAD ── -->
+        <div id="tab-uploads" class="tab-panel">
+          <div style="padding-top: 1rem;">
+
+            <div class="upload-header">
+              <div class="upload-header-left">
+                <div>
+                  <div class="upload-title">Files from mobile app</div>
+                  <div class="upload-subtitle">6 files waiting &bull; 1 uploading</div>
+                </div>
+              </div>
+              <div class="upload-device">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                  <line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+                iPhone 14 Pro &bull; Alex R.
+              </div>
+            </div>
+
+            <div class="upload-list">
+
+              <!-- Uploading -->
+              <div class="upload-row">
+                <div class="file-icon video">🎥</div>
+                <div class="file-meta">
+                  <div class="file-name">VID_20260219_143211.mp4</div>
+                  <div class="file-details">Video &bull; 87.4 MB</div>
+                </div>
+                <div class="file-case">INV-004</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-uploading">
+                    <span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 1.2s infinite;"></span>
+                    Uploading
+                  </span>
+                  <div class="upload-progress">
+                    <div class="upload-progress-fill" style="width:65%"></div>
+                  </div>
+                  <div class="upload-pct">65%</div>
+                </div>
+              </div>
+
+              <!-- Pending -->
+              <div class="upload-row">
+                <div class="file-icon photo">📷</div>
+                <div class="file-meta">
+                  <div class="file-name">IMG_4821.jpg</div>
+                  <div class="file-details">Photo &bull; 4.2 MB</div>
+                </div>
+                <div class="file-case">INV-004</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-pending">Pending</span>
+                </div>
+              </div>
+
+              <div class="upload-row">
+                <div class="file-icon audio">🎙️</div>
+                <div class="file-meta">
+                  <div class="file-name">testimony_recording_03.m4a</div>
+                  <div class="file-details">Audio &bull; 12.1 MB</div>
+                </div>
+                <div class="file-case">INV-009</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-pending">Pending</span>
+                </div>
+              </div>
+
+              <div class="upload-row">
+                <div class="file-icon document">📄</div>
+                <div class="file-meta">
+                  <div class="file-name">site_map_kharkiv_north.pdf</div>
+                  <div class="file-details">Document &bull; 2.8 MB</div>
+                </div>
+                <div class="file-case">INV-009</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-pending">Pending</span>
+                </div>
+              </div>
+
+              <div class="upload-row">
+                <div class="file-icon photo">📷</div>
+                <div class="file-meta">
+                  <div class="file-name">IMG_4833.jpg</div>
+                  <div class="file-details">Photo &bull; 3.7 MB</div>
+                </div>
+                <div class="file-case">INV-011</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-queued">Queued</span>
+                </div>
+              </div>
+
+              <div class="upload-row">
+                <div class="file-icon photo">📷</div>
+                <div class="file-meta">
+                  <div class="file-name">IMG_4834.jpg</div>
+                  <div class="file-details">Photo &bull; 3.9 MB</div>
+                </div>
+                <div class="file-case">INV-011</div>
+                <div class="upload-status">
+                  <span class="ustatus-pill ustatus-queued">Queued</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel: dashboard -->
+
+    <!-- ── INVESTIGATIONS PANEL ──────────────────── -->
+    <div class="page-content page-panel" data-panel="investigations">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Investigations</div>
+          <div class="panel-subtitle">7 total &bull; 4 active &bull; 2 in review</div>
+        </div>
+        <button class="panel-action-btn">+ New Case</button>
+      </div>
+      <table class="cases-table">
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Region</th>
+            <th>Opened</th>
+            <th>Lead Investigator</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji purple">📁</div><div class="case-name-cell"><div class="case-title">Northern Syria Airstrike</div><div class="case-id">INV-004</div></div></div></td>
+            <td><span class="updated-text">Idlib, Syria</span></td>
+            <td><span class="updated-text">14 Jan 2026</span></td>
+            <td><span class="updated-text">A. Rodriguez</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji purple">📁</div><div class="case-name-cell"><div class="case-title">Zaporizhzhia Infrastructure Attack</div><div class="case-id">INV-011</div></div></div></td>
+            <td><span class="updated-text">Zaporizhzhia, Ukraine</span></td>
+            <td><span class="updated-text">2 Feb 2026</span></td>
+            <td><span class="updated-text">M. Chen</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji amber">📁</div><div class="case-name-cell"><div class="case-title">Bucha Residential District</div><div class="case-id">INV-007</div></div></div></td>
+            <td><span class="updated-text">Bucha, Ukraine</span></td>
+            <td><span class="updated-text">8 Nov 2025</span></td>
+            <td><span class="updated-text">A. Rodriguez</span></td>
+            <td><span class="case-status status-active"><span class="sdot"></span>Active</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji teal">⚖️</div><div class="case-name-cell"><div class="case-title">Detained Civilians — Kharkiv Region</div><div class="case-id">INV-009</div></div></div></td>
+            <td><span class="updated-text">Kharkiv, Ukraine</span></td>
+            <td><span class="updated-text">3 Dec 2025</span></td>
+            <td><span class="updated-text">S. Okafor</span></td>
+            <td><span class="case-status status-review"><span class="sdot"></span>In Review</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+          <tr>
+            <td><div class="case-icon-cell"><div class="case-emoji rose">🗂️</div><div class="case-name-cell"><div class="case-title">Mariupol Port District Survey</div><div class="case-id">INV-002</div></div></div></td>
+            <td><span class="updated-text">Mariupol, Ukraine</span></td>
+            <td><span class="updated-text">17 Jun 2025</span></td>
+            <td><span class="updated-text">M. Chen</span></td>
+            <td><span class="case-status status-archived"><span class="sdot"></span>Archived</span></td>
+            <td><button class="action-btn">Open &rarr;</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- /panel: investigations -->
+
+    <!-- ── EVIDENCE PANEL ─────────────────────────── -->
+    <div class="page-content page-panel" data-panel="evidence">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Evidence Archive</div>
+          <div class="panel-subtitle">4,217 items across 7 cases</div>
+        </div>
+        <button class="panel-action-btn">+ Add Evidence</button>
+      </div>
+      <div class="filter-chips">
+        <button class="filter-chip active">All (4,217)</button>
+        <button class="filter-chip">Photo (2,341)</button>
+        <button class="filter-chip">Video (891)</button>
+        <button class="filter-chip">Audio (203)</button>
+        <button class="filter-chip">Document (782)</button>
+      </div>
+      <div class="evidence-grid">
+        <div class="ev-card"><div class="ev-thumb video" style="background:rgba(225,29,72,0.15)">🎥</div><div class="ev-info"><div class="ev-fname">VID_20260219_143211.mp4</div><div class="ev-meta">Video &bull; 87.4 MB &bull; Feb 19, 2026</div><span class="ev-tag">INV-004</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(109,40,217,0.18)">📷</div><div class="ev-info"><div class="ev-fname">IMG_4821_airstrike_site.jpg</div><div class="ev-meta">Photo &bull; 4.2 MB &bull; Feb 19, 2026</div><span class="ev-tag">INV-004</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(234,179,8,0.12)">🎙️</div><div class="ev-info"><div class="ev-fname">testimony_recording_03.m4a</div><div class="ev-meta">Audio &bull; 12.1 MB &bull; Feb 18, 2026</div><span class="ev-tag">INV-009</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(20,184,166,0.12)">📄</div><div class="ev-info"><div class="ev-fname">site_map_kharkiv_north.pdf</div><div class="ev-meta">Document &bull; 2.8 MB &bull; Feb 17, 2026</div><span class="ev-tag">INV-009</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(109,40,217,0.18)">📷</div><div class="ev-info"><div class="ev-fname">IMG_4833_infrastructure.jpg</div><div class="ev-meta">Photo &bull; 3.7 MB &bull; Feb 16, 2026</div><span class="ev-tag">INV-011</span></div></div>
+        <div class="ev-card"><div class="ev-thumb" style="background:rgba(20,184,166,0.12)">📄</div><div class="ev-info"><div class="ev-fname">witness_statement_W-021.pdf</div><div class="ev-meta">Document &bull; 1.1 MB &bull; Feb 15, 2026</div><span class="ev-tag">INV-007</span></div></div>
+      </div>
+    </div><!-- /panel: evidence -->
+
+    <!-- ── WITNESSES PANEL ────────────────────────── -->
+    <div class="page-content page-panel" data-panel="witnesses">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Witness Registry</div>
+          <div class="panel-subtitle">23 registered &bull; 14 interviewed &bull; 9 pending</div>
+        </div>
+        <button class="panel-action-btn">+ Add Witness</button>
+      </div>
+      <div class="witness-list">
+        <div class="witness-row">
+          <div class="witness-avatar">W21</div>
+          <div class="witness-info"><div class="witness-id">Witness A-21 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult male</span></div><div class="witness-case">INV-004 &bull; Northern Syria Airstrike</div></div>
+          <span class="wstatus-pill wstatus-interviewed"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Interviewed</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W17</div>
+          <div class="witness-info"><div class="witness-id">Witness B-17 &bull; <span style="font-weight:400;color:var(--muted)">Medical staff</span></div><div class="witness-case">INV-007 &bull; Bucha Residential District</div></div>
+          <span class="wstatus-pill wstatus-scheduled"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Scheduled</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W09</div>
+          <div class="witness-info"><div class="witness-id">Witness C-09 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult female</span></div><div class="witness-case">INV-009 &bull; Detained Civilians — Kharkiv</div></div>
+          <span class="wstatus-pill wstatus-protected"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Protected</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W33</div>
+          <div class="witness-info"><div class="witness-id">Witness D-33 &bull; <span style="font-weight:400;color:var(--muted)">First responder</span></div><div class="witness-case">INV-011 &bull; Zaporizhzhia Infrastructure</div></div>
+          <span class="wstatus-pill wstatus-pending">Pending</span>
+        </div>
+        <div class="witness-row">
+          <div class="witness-avatar">W05</div>
+          <div class="witness-info"><div class="witness-id">Witness E-05 &bull; <span style="font-weight:400;color:var(--muted)">Civilian, adult male</span></div><div class="witness-case">INV-004 &bull; Northern Syria Airstrike</div></div>
+          <span class="wstatus-pill wstatus-interviewed"><span class="sdot" style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>Interviewed</span>
+        </div>
+      </div>
+    </div><!-- /panel: witnesses -->
+
+    <!-- ── AI ANALYSIS PANEL ──────────────────────── -->
+    <div class="page-content page-panel" data-panel="ai-analysis">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">AI Intelligence</div>
+          <div class="panel-subtitle">124 insights generated &bull; 6 new this session</div>
+        </div>
+        <div class="mobile-pill" style="margin:0"><span class="dot"></span><span>Analysis running</span></div>
+      </div>
+      <div class="ai-insights-grid">
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Cross-Reference</span>
+            <span class="insight-conf">97% confidence</span>
+          </div>
+          <div class="insight-title">3 witness accounts corroborate airstrike trajectory</div>
+          <div class="insight-desc">Testimonies from Witness A-21, A-14, and B-03 describe consistent northern approach vector. Geolocation data from 2 video files confirms impact coordinates within 80m radius.</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-004</span><span class="insight-case-tag">W-21</span><span class="insight-case-tag">W-14</span><span class="insight-case-tag">W-03</span></div>
+        </div>
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Pattern Detection</span>
+            <span class="insight-conf">89% confidence</span>
+          </div>
+          <div class="insight-title">Infrastructure targeting pattern identified across 2 cases</div>
+          <div class="insight-desc">Structural damage signatures in INV-011 satellite imagery match documented patterns from INV-004. Both incidents show targeting of civilian power infrastructure during peak usage hours (06:00–09:00 local).</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-011</span><span class="insight-case-tag">INV-004</span></div>
+        </div>
+        <div class="ai-insight-card">
+          <div class="insight-header">
+            <span class="insight-type">Risk Assessment</span>
+            <span class="insight-conf">High priority</span>
+          </div>
+          <div class="insight-title">Witness C-09 protection level recommended upgrade</div>
+          <div class="insight-desc">Social graph analysis indicates potential identification risk based on recent regional data. Recommend escalating from standard to enhanced protection protocol pending case team review.</div>
+          <div class="insight-cases"><span class="insight-case-tag">INV-009</span><span class="insight-case-tag">W-09</span></div>
+        </div>
+      </div>
+    </div><!-- /panel: ai-analysis -->
+
+    <!-- ── CASE REPORTS PANEL ─────────────────────── -->
+    <div class="page-content page-panel" data-panel="case-reports">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Case Reports</div>
+          <div class="panel-subtitle">12 reports generated &bull; 3 pending review</div>
+        </div>
+        <button class="panel-action-btn">+ Generate Report</button>
+      </div>
+      <div class="reports-list">
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-004 Interim Evidence Summary — Feb 2026</div>
+            <div class="report-detail">PDF &bull; 2.4 MB &bull; Generated Feb 19, 2026 &bull; Northern Syria Airstrike</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-009 Witness Testimony Compilation</div>
+            <div class="report-detail">PDF &bull; 1.8 MB &bull; Generated Feb 17, 2026 &bull; Kharkiv Region</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-011 Infrastructure Damage Assessment</div>
+            <div class="report-detail">PDF &bull; 3.1 MB &bull; Generated Feb 15, 2026 &bull; Zaporizhzhia</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+        <div class="report-row">
+          <div class="report-icon">📋</div>
+          <div class="report-meta">
+            <div class="report-name">INV-002 Final Case Report — Archived</div>
+            <div class="report-detail">PDF &bull; 5.7 MB &bull; Generated Jan 29, 2026 &bull; Mariupol Port District</div>
+          </div>
+          <button class="report-download">↓ Download</button>
+        </div>
+      </div>
+    </div><!-- /panel: case-reports -->
+
+    <!-- ── SETTINGS PANEL ────────────────────────── -->
+    <div class="page-content page-panel" data-panel="settings">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Settings</div>
+          <div class="panel-subtitle">Manage your account, privacy, and integrations</div>
+        </div>
+        <button class="panel-action-btn">Save Changes</button>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- Left nav -->
+        <div class="settings-sidebar">
+          <div class="settings-nav-item active" data-settings-tab="profile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </div>
+          <div class="settings-nav-item" data-settings-tab="privacy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Privacy
+          </div>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-item" data-settings-tab="rag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            RAG Integration
+          </div>
+          <div class="settings-nav-item" data-settings-tab="self-hosted">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            Self-Hosted RAG
+          </div>
+          <div class="settings-nav-divider"></div>
+          <div class="settings-nav-item" data-settings-tab="notifications">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notifications
+          </div>
+          <div class="settings-nav-item" data-settings-tab="security">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Security
+          </div>
+        </div>
+
+        <!-- Right content -->
+        <div class="settings-content">
+
+          <!-- ── PROFILE ── -->
+          <div class="settings-section active" data-settings-section="profile">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <div>
+                  <div class="settings-card-title">Account Profile</div>
+                  <div class="settings-card-desc">Your identity and role within EVIDA</div>
+                </div>
+              </div>
+              <div class="profile-avatar-row">
+                <div class="profile-avatar-lg">AR</div>
+                <div class="profile-avatar-meta">
+                  <div class="profile-avatar-name">Alex Rodriguez</div>
+                  <div class="profile-avatar-role">Senior Investigator &bull; Human Rights Watch</div>
+                </div>
+                <button class="settings-btn">Change Photo</button>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Full Name</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="Alex Rodriguez" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Email Address</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="a.rodriguez@hrw.org" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Role</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>Senior Investigator</option>
+                    <option>Investigator</option>
+                    <option>Analyst</option>
+                    <option>Administrator</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Organization</div>
+                  </div>
+                  <input class="settings-input" style="max-width:220px" value="Human Rights Watch" />
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Language</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>English</option>
+                    <option>French</option>
+                    <option>Arabic</option>
+                    <option>Spanish</option>
+                    <option>Ukrainian</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-footer-row">
+                <button class="settings-btn">Cancel</button>
+                <button class="settings-btn settings-btn-primary">Save Profile</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── PRIVACY ── -->
+          <div class="settings-section" data-settings-section="privacy">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div>
+                  <div class="settings-card-title">Data Privacy</div>
+                  <div class="settings-card-desc">Control how your data and case information is handled</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Anonymise witness identifiers in exports</div>
+                    <div class="settings-row-sublabel">Replace real names and IDs with codenames in all downloaded reports and exports</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Strip metadata from uploaded media</div>
+                    <div class="settings-row-sublabel">Automatically remove EXIF data (GPS, device info) from photos and videos on ingest</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">End-to-end encrypt case notes</div>
+                    <div class="settings-row-sublabel">Notes are encrypted client-side before being stored. Only you and authorised team members can read them</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Allow AI to reference witness data</div>
+                    <div class="settings-row-sublabel">Permit the AI analysis engine to cross-reference witness records when generating insights</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Usage analytics</div>
+                    <div class="settings-row-sublabel">Send anonymous product analytics to help improve EVIDA. No case data is ever included</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                <div>
+                  <div class="settings-card-title">Data Retention</div>
+                  <div class="settings-card-desc">Set how long data is kept before automatic purging</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Archive closed cases after</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>30 days</option>
+                    <option>90 days</option>
+                    <option selected>180 days</option>
+                    <option>1 year</option>
+                    <option>Never</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Session log retention</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>7 days</option>
+                    <option selected>30 days</option>
+                    <option>90 days</option>
+                    <option>1 year</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Request data export</div>
+                    <div class="settings-row-sublabel">Download a complete archive of your account data</div>
+                  </div>
+                  <button class="settings-btn">Export Data</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Delete account</div>
+                    <div class="settings-row-sublabel">Permanently remove your account and all associated data</div>
+                  </div>
+                  <button class="settings-btn settings-btn-danger">Delete Account</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── RAG INTEGRATION ── -->
+          <div class="settings-section" data-settings-section="rag">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                <div>
+                  <div class="settings-card-title">RAG Knowledge Source</div>
+                  <div class="settings-card-desc">Choose where the AI retrieves contextual knowledge when analysing your cases</div>
+                </div>
+              </div>
+              <div class="rag-mode-grid">
+                <div class="rag-mode-card selected" data-rag-mode="evida-cloud">
+                  <div class="rag-mode-icon">☁️</div>
+                  <div class="rag-mode-title">EVIDA Cloud RAG</div>
+                  <div class="rag-mode-desc">Managed knowledge base hosted by EVIDA. Zero setup, always up to date.</div>
+                </div>
+                <div class="rag-mode-card" data-rag-mode="external">
+                  <div class="rag-mode-icon">🔗</div>
+                  <div class="rag-mode-title">External RAG API</div>
+                  <div class="rag-mode-desc">Connect to Pinecone, Weaviate, Qdrant, or any OpenAI-compatible vector store.</div>
+                </div>
+                <div class="rag-mode-card" data-rag-mode="self-hosted">
+                  <div class="rag-mode-icon">🖥️</div>
+                  <div class="rag-mode-title">Self-Hosted RAG</div>
+                  <div class="rag-mode-desc">Point to your own privately hosted RAG system — full data sovereignty.</div>
+                </div>
+              </div>
+
+              <!-- EVIDA Cloud config (default visible) -->
+              <div class="rag-config-block" id="rag-config-evida-cloud">
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Status</div>
+                    <div class="settings-row-sublabel">EVIDA Cloud RAG is active and indexing your cases in real time</div>
+                  </div>
+                  <span class="rag-status-pill rag-status-connected"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block"></span>Connected</span>
+                </div>
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Index size</div>
+                  </div>
+                  <span style="font-size:0.78rem;color:var(--purple-pale);font-weight:600">4,217 documents</span>
+                </div>
+                <div class="settings-row" style="padding-left:0;padding-right:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Re-index all cases</div>
+                    <div class="settings-row-sublabel">Force a full re-embedding of all evidence and case notes</div>
+                  </div>
+                  <button class="settings-btn">Re-index Now</button>
+                </div>
+              </div>
+
+              <!-- External RAG config -->
+              <div class="rag-config-block hidden" id="rag-config-external">
+                <div class="rag-config-label">External RAG Provider</div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Provider</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Pinecone</option>
+                    <option>Weaviate</option>
+                    <option>Qdrant</option>
+                    <option>Chroma</option>
+                    <option>OpenAI-compatible endpoint</option>
+                  </select>
+                </div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">API Key</div>
+                  <input class="settings-input" type="password" placeholder="sk-••••••••••••••••" />
+                </div>
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Index / Collection Name</div>
+                  <input class="settings-input" placeholder="evida-evidence-index" />
+                </div>
+                <div class="settings-input-group">
+                  <button class="settings-btn settings-btn-primary">Test Connection</button>
+                  <span class="rag-status-pill rag-status-disconnected">Not connected</span>
+                </div>
+              </div>
+
+              <div class="settings-footer-row">
+                <button class="settings-btn">Reset to Default</button>
+                <button class="settings-btn settings-btn-primary">Apply</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div>
+                  <div class="settings-card-title">Retrieval Behaviour</div>
+                  <div class="settings-card-desc">Tune how the AI searches and ranks knowledge</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Top-K results</div>
+                    <div class="settings-row-sublabel">How many documents to retrieve per query</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>3</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Similarity threshold</div>
+                    <div class="settings-row-sublabel">Minimum relevance score for a document to be included</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>0.5 — Broad</option>
+                    <option selected>0.7 — Balanced</option>
+                    <option>0.85 — Strict</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Include witness transcripts</div>
+                    <div class="settings-row-sublabel">Allow witness testimony text to be retrieved as context</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Include AI-generated summaries</div>
+                    <div class="settings-row-sublabel">Use prior AI insight summaries as retrievable context</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SELF-HOSTED RAG ── -->
+          <div class="settings-section" data-settings-section="self-hosted">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                <div>
+                  <div class="settings-card-title">Self-Hosted RAG System</div>
+                  <div class="settings-card-desc">Connect EVIDA to your own privately operated retrieval infrastructure</div>
+                </div>
+                <span class="settings-badge" style="margin-left:auto">Advanced</span>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Enable self-hosted RAG</div>
+                    <div class="settings-row-sublabel">Override all cloud RAG settings and route all retrieval queries to your server</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="selfhosted-toggle" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="rag-config-block" id="self-hosted-config">
+                <div class="rag-config-label">Server Configuration</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Endpoint URL</div>
+                  <input class="settings-input" placeholder="https://rag.your-domain.org/v1/query" />
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">API Key / Bearer Token</div>
+                  <div class="settings-input-group">
+                    <input class="settings-input" type="password" placeholder="Your private API key" />
+                    <button class="settings-btn">Show</button>
+                  </div>
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Authentication method</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Bearer Token</option>
+                    <option>API Key Header</option>
+                    <option>Basic Auth</option>
+                    <option>mTLS Certificate</option>
+                    <option>None (internal network)</option>
+                  </select>
+                </div>
+
+                <div class="rag-config-label" style="margin-top:0.4rem">Network &amp; TLS</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Request timeout (ms)</div>
+                  <input class="settings-input" placeholder="5000" style="max-width:160px" />
+                </div>
+
+                <div class="settings-row" style="padding:0;border:none">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Verify TLS certificate</div>
+                    <div class="settings-row-sublabel">Disable only for internal/self-signed certs on isolated networks</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+
+                <div class="rag-config-label" style="margin-top:0.4rem">Index Mapping</div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Collection / namespace</div>
+                  <input class="settings-input" placeholder="evida-cases" />
+                </div>
+
+                <div class="rag-field">
+                  <div class="settings-row-sublabel">Embedding model (optional override)</div>
+                  <select class="settings-select" style="width:100%">
+                    <option>Use server default</option>
+                    <option>text-embedding-3-small</option>
+                    <option>text-embedding-3-large</option>
+                    <option>nomic-embed-text</option>
+                    <option>bge-m3</option>
+                    <option>Custom</option>
+                  </select>
+                </div>
+
+                <div class="settings-input-group" style="margin-top:0.25rem">
+                  <button class="settings-btn settings-btn-primary">Test Connection</button>
+                  <span class="rag-status-pill rag-status-disconnected" id="selfhosted-status">Not connected</span>
+                </div>
+              </div>
+
+              <div class="settings-footer-row">
+                <button class="settings-btn">Discard</button>
+                <button class="settings-btn settings-btn-primary">Save &amp; Connect</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <div>
+                  <div class="settings-card-title">Connection Health</div>
+                  <div class="settings-card-desc">Live diagnostics for your self-hosted RAG endpoint</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Endpoint reachable</div></div>
+                  <span class="rag-status-pill rag-status-disconnected">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Auth valid</div></div>
+                  <span class="rag-status-pill rag-status-disconnected">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Avg. query latency</div></div>
+                  <span style="font-size:0.78rem;color:var(--muted)">—</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info"><div class="settings-row-label">Last successful query</div></div>
+                  <span style="font-size:0.78rem;color:var(--muted)">Never</span>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Run diagnostics</div>
+                    <div class="settings-row-sublabel">Send a test query and inspect the raw response</div>
+                  </div>
+                  <button class="settings-btn">Run Test</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── NOTIFICATIONS ── -->
+          <div class="settings-section" data-settings-section="notifications">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <div>
+                  <div class="settings-card-title">Notification Preferences</div>
+                  <div class="settings-card-desc">Choose what you're alerted to and how</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">New AI insight generated</div>
+                    <div class="settings-row-sublabel">Alert when EVIDA AI produces a new cross-case insight</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Evidence upload complete</div>
+                    <div class="settings-row-sublabel">Notify when a batch upload finishes processing</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Witness status change</div>
+                    <div class="settings-row-sublabel">Alert when a witness protection level is updated</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Case review deadline approaching</div>
+                    <div class="settings-row-sublabel">Reminder 48 hours before a review deadline</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Mobile push notifications</div>
+                    <div class="settings-row-sublabel">Receive alerts on the EVIDA Mobile app</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Email digest</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>Off</option>
+                    <option selected>Daily</option>
+                    <option>Weekly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SECURITY ── -->
+          <div class="settings-section" data-settings-section="security">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <div>
+                  <div class="settings-card-title">Security &amp; Access</div>
+                  <div class="settings-card-desc">Protect your account and active sessions</div>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Two-factor authentication</div>
+                    <div class="settings-row-sublabel">Require a TOTP code in addition to your password on each login</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Passkey login</div>
+                    <div class="settings-row-sublabel">Use a device biometric or hardware key instead of password</div>
+                  </div>
+                  <button class="settings-btn">Set Up Passkey</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Session auto-lock</div>
+                    <div class="settings-row-sublabel">Lock the dashboard automatically after a period of inactivity</div>
+                  </div>
+                  <select class="settings-select">
+                    <option>5 minutes</option>
+                    <option selected>15 minutes</option>
+                    <option>30 minutes</option>
+                    <option>1 hour</option>
+                    <option>Never</option>
+                  </select>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Login activity alerts</div>
+                    <div class="settings-row-sublabel">Send an email when a new device logs into your account</div>
+                  </div>
+                  <label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-track"></span></label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Change password</div>
+                  </div>
+                  <button class="settings-btn">Change Password</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="settings-row-label">Revoke all sessions</div>
+                    <div class="settings-row-sublabel">Sign out all devices immediately — you will also be logged out</div>
+                  </div>
+                  <button class="settings-btn settings-btn-danger">Revoke All</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /settings-content -->
+      </div><!-- /settings-layout -->
+    </div><!-- /panel: settings -->
+
+  </div><!-- /main -->
+
+  <!-- Demo cursor -->
+  <div id="demo-cursor">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" viewBox="0 0 22 26" fill="none">
+      <path d="M3 2L3 20L7.5 15.5L10.2 23L13 22L10.2 14L17 14Z" fill="white" stroke="#1a0a3a" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <script>
+    /* ── Manual tab clicks ──────────────────────── */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    /* ── Manual nav clicks ──────────────────────── */
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        userTookControl = true;
+        activatePanel(item.dataset.page);
+      });
+    });
+
+    function activatePanel(page) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+      if (navItem) navItem.classList.add('active');
+
+      // Hide all panels instantly
+      document.querySelectorAll('.page-panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+        p.style.opacity = '0';
+        p.style.transform = 'translateY(10px)';
+        p.style.transition = '';
+      });
+
+      const panel = document.querySelector(`.page-panel[data-panel="${page}"]`);
+      if (panel) {
+        panel.style.display = 'block';
+        panel.style.opacity = '0';
+        panel.style.transform = 'translateY(10px)';
+        panel.classList.add('active');
+        document.querySelector('.main').scrollTop = 0;
+        // Animate in on next frame
+        requestAnimationFrame(() => {
+          panel.style.transition = 'opacity 0.32s cubic-bezier(0.16,1,0.3,1), transform 0.32s cubic-bezier(0.16,1,0.3,1)';
+          panel.style.opacity = '1';
+          panel.style.transform = 'translateY(0)';
+        });
+      }
+    }
+
+    /* ── Settings tab navigation ───────────────── */
+    document.querySelectorAll('.settings-nav-item[data-settings-tab]').forEach(item => {
+      item.addEventListener('click', () => {
+        const tab = item.dataset.settingsTab;
+        document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+        const section = document.querySelector(`.settings-section[data-settings-section="${tab}"]`);
+        if (section) section.classList.add('active');
+      });
+    });
+
+    /* ── RAG mode card selection ────────────────── */
+    document.querySelectorAll('.rag-mode-card[data-rag-mode]').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.rag-mode-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        // Hide all rag config blocks
+        document.querySelectorAll('[id^="rag-config-"]').forEach(el => el.classList.add('hidden'));
+        const configEl = document.getElementById('rag-config-' + card.dataset.ragMode);
+        if (configEl) configEl.classList.remove('hidden');
+      });
+    });
+
+    /* ── Demo cursor animation ──────────────────── */
+    const cursor = document.getElementById('demo-cursor');
+
+    function moveCursor(x, y) {
+      cursor.style.left = x + 'px';
+      cursor.style.top  = y + 'px';
+    }
+
+    function spawnRipple(x, y) {
+      const r = document.createElement('div');
+      r.className = 'cursor-ripple';
+      r.style.left = (x + 4) + 'px';
+      r.style.top  = (y + 4) + 'px';
+      document.body.appendChild(r);
+      setTimeout(() => r.remove(), 550);
+    }
+
+    function clickCursor(x, y) {
+      cursor.classList.remove('clicking');
+      void cursor.offsetWidth; // reflow to re-trigger animation
+      cursor.classList.add('clicking');
+      spawnRipple(x, y);
+      cursor.addEventListener('animationend', () => cursor.classList.remove('clicking'), { once: true });
+    }
+
+    // Demo sequence: nav items to click, then tab sequence inside dashboard
+    const navSequence = [
+      'investigations',
+      'evidence',
+      'witnesses',
+      'ai-analysis',
+      'case-reports',
+      'dashboard',
+    ];
+
+    // After landing on dashboard, also animate between tabs
+    const tabSequence = [
+      { tab: 'tab-uploads', label: 'Pending Upload' },
+      { tab: 'tab-cases',   label: 'Latest Cases'  },
+    ];
+
+    let navIdx          = 0;
+    let paused          = false;
+    let userTookControl = false;
+
+    // Hide cursor offscreen initially
+    moveCursor(-100, -100);
+
+    function wait(ms) {
+      return new Promise(res => setTimeout(res, ms));
+    }
+
+    async function clickNavItem(page) {
+      const el = document.querySelector(`.nav-item[data-page="${page}"]`);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const tx = rect.left + 10;
+      const ty = rect.top  + rect.height / 2 - 4;
+
+      // hover highlight
+      el.classList.add('demo-hover');
+      moveCursor(tx, ty);
+      await wait(750); // cursor travel time
+
+      // click
+      clickCursor(tx, ty);
+      el.classList.remove('demo-hover');
+      activatePanel(page);
+      await wait(150);
+    }
+
+    async function clickTabBtn(tabId) {
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const tx = rect.left + rect.width / 2 - 4;
+      const ty = rect.top  + rect.height / 2 - 4;
+
+      btn.classList.add('demo-hover');
+      moveCursor(tx, ty);
+      await wait(700);
+
+      clickCursor(tx, ty);
+      btn.classList.remove('demo-hover');
+
+      // trigger tab switch
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      await wait(150);
+    }
+
+    async function runDemoLoop() {
+      await wait(1200); // initial pause before first move
+
+      while (true) {
+        if (userTookControl) {
+          cursor.style.display = 'none';
+          return;
+        }
+        if (paused) { await wait(400); continue; }
+
+        const page = navSequence[navIdx];
+        await clickNavItem(page);
+
+        if (page === 'dashboard') {
+          // pause on dashboard, then animate tabs
+          await wait(1800);
+          for (const t of tabSequence) {
+            if (paused || userTookControl) break;
+            await clickTabBtn(t.tab);
+            await wait(2000);
+          }
+          await wait(600);
+        } else {
+          await wait(2800);
+        }
+
+        navIdx = (navIdx + 1) % navSequence.length;
+      }
+    }
+
+    // Pause demo on user hover over sidebar
+    document.querySelector('.sidebar').addEventListener('mouseenter', () => { paused = true; });
+    document.querySelector('.sidebar').addEventListener('mouseleave', () => { paused = false; });
+
+    runDemoLoop();
+  </script>
+
+</body>
+</html>
