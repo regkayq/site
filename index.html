@@ -134,24 +134,22 @@
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--purple-pale);
-      background: rgba(109,40,217,0.1);
-      margin-bottom: 2rem;
-      letter-spacing: 0.04em;
+      gap: 0.75rem;
+      margin-bottom: 2.2rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
-    .hero-badge .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--purple-light);
-      animation: pulse 2s ease-in-out infinite;
+    .hero-badge::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--muted);
+      opacity: 0.5;
     }
 
     @keyframes pulse {
@@ -749,18 +747,18 @@
   <!-- ── HERO ──────────────────────────────────── -->
   <section class="hero">
     <div class="hero-badge">
-      <span class="dot"></span>
-      AI-Powered Legal Intelligence
+      UI/UX Case Study
     </div>
 
     <h1>
-      Manage Evidence.<br/>
-      <span class="gradient">Build Cases. Win Justice.</span>
+      Archiving War Crimes.<br/>
+      <span class="gradient">Simplified.</span>
     </h1>
 
     <p>
-      EVIDA brings AI to the courtroom. Organize files, manage evidence chains,
-      and build airtight court cases — all from a single, secure platform.
+      EVIDA is an AI-powered platform for investigators and legal teams to
+      securely archive evidence, manage case files, and build documentation
+      that holds up in international courts.
     </p>
 
     <div class="hero-actions">
