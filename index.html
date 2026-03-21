@@ -228,22 +228,24 @@
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 2.2rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.12em;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--purple-pale);
+      background: rgba(109,40,217,0.1);
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .hero-badge::before {
-      content: '';
-      display: block;
-      width: 28px;
-      height: 1px;
-      background: var(--muted);
-      opacity: 0.5;
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
@@ -851,12 +853,12 @@
   <section class="hero">
     <div class="hero-badge">
       <span class="dot"></span>
-      AI-Powered War Crimes Documentation
+      AI-Powered Evidence Platform
     </div>
 
     <h1>
-      Archive War Crimes.<br/>
-      <span class="gradient">Build Cases. Pursue Justice.</span>
+      Archiving War Crimes.<br/>
+      <span class="gradient">Simplified.</span>
     </h1>
 
     <p>
